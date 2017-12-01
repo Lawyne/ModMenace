@@ -1,0 +1,29 @@
+La présentation du 01/12/2017 s'articule selon deux axes :
+-L'approfondissement de l'étude des arbres d'attaque
+-La présentation du travail de Pentest sur hynesim avec Bastien
+
+Après un bref rappel sur les arbres d'attaque, j'évoque la notion d'arbre de défaillance et sa bibliographie très orientée
+sur les probabilités. Les arbres de défaillance, bien que différents des arbres d'attaque, offrent des outils de compréhension
+pertinents pour l'étude des arbres d'attaque. Un développement intéressant est de créer un arbre d'attaque en combinant les
+arbres de défaillance avec des modèles de Markov qui sont des automates probabilistes qui offrent des algorithmes d'inférence
+de comportement. Une autre approche suggérée utilise les réseaux de Pétri, elle a suscité de l'interet auprès de M. Dhaussy &
+M. Teodorov du au lien intrinsèque entre les réseaux de Pétri et les automates qu'ils ont l'habitude de manipuler.
+
+La deuxième partie qui présente le contenu du travail fourni avec Bastien Drouot sur hynesim, l'outil de simulation de réseau
+de DIATEAM a été sous-développée par manque de temps. Plus d'informations sont disponibles dans le document intitulé Pentest.
+Néanmoins, la méthodologie de l'attaquant et l'utilisation de l'outil Metasploit a provoqué une longue discussion.
+
+Cette discussion avait pour sujet la mise en rapport des arbres d'attaque avec la méthodologie de l'attaquant présentée
+par DIATEAM. Le lien non-évident a fait l'objet de différentes positions adoptées par M. Champeau et M. Teodorov.
+Pour Joël, les arbres d'attaques sont dédiés au système qu'ils sont sensés représenter sous un aspect de sécurité. Cette notion
+se rapproche particulièrement des arbres de défaillance conçus pour assurer la sureté du système.
+Pour Ciprian, les arbres sont des méthologies développées par les attaquants grace à leur expérience pour déterminer
+une marche à suivre en fonction de la réponse du système visé. C'est une méthodologie qui offre différents chemins d'attaque.
+
+Un autre point a été soulevé concernant la faisabilité de l'approche exhaustive pour l'évaluation des arbres d'attaque.
+Celle-ci est non-garantie dans la littérature mais applicable dans des cas particuliers qui font l'objet de travaux dans le
+Lab STICC.
+
+A l'issue de la présentation, les travaux à venir ont reçus différents ordres de priorité. L'accent a été mis sur la méthodologie
+de l'attaquant et la méthodologie PimCA qui passent en priorité. Les divers modèles mathématiques qui ont été présentés restent
+au second plan pour le moment. Il est également suggéré d'approfondir les connaissances sur metasploit. 
