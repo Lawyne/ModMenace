@@ -1,0 +1,29 @@
+La présentation du 15/12/2017 s'articule selon trois axes :
+-La présentation du Penetration Testing Execution Standard (PTES)
+-La présentation du projet IA4SIM que j'ai mené en 3e année avec Quentin Aubertot
+-La présentation de l'Operational Design
+
+Après avoir situé mes travaux vis à vis du sujet de thèse, j'évoque différentes méthodologie de Pentests pour me concentrer
+sur l'une d'entre elle, le PTES. Celle-ci, composée de 7 étapes, comprend une étape (Analyse des vulnérabilités) directement liée
+aux arbres d'attaques sur lesquels j'ai consacré les deux présentations précédentes. Une autre étape retient mon attention, à
+savoir le Threat Modeling ou Modélisation de la Menace qui coïncide avec mon sujet de thèse. Pour développer cette étape, je
+choisis de m'intéresser à l'Opérational Design.
+
+Pour pouvoir en parler, j'aborde les Ontologies informatiques dans la deuxième partie, comme outil de modélisation graphique.
+Je présente les ontologies à travers le projet IA4SIM dont la documentation est disponible ici: https://github.com/Quentin81/IA4SIM
+
+Enfin j'aborde la méthodologie utilisant l'Operational Design comme méthodologie pour concevoir et construire des opérations militaires.
+C'est principalement sur cette partie que portaient la majorité de la discussion qui a suivi. Ciprian souligne l'absence de clareté
+dans les définitions de termes clés tels que "menace" & "attaque" qui représentent des concepts distincts. Une partie du travail à
+fournir par la suite consistera à définir proprement ces termes. Par ailleurs Hannah suggère d'approfondir les connaissances en exemples
+de cyber-attaque, à travers une taxonomie notamment, avant de poursuivre dans la modélisation des concepts. Enfin Luka rappelle
+l'importance capitale de l'aspect dynamique dans la modélisation future et pose le problème de cet aspect dans le cadre d'une
+ontologie et de son moteur d'inférence.
+
+A l'issue de la présentation, les travaux à venir sont les suivants (par ordre de priorité) : Définir menace, attaquant et les autres
+termes clés. Représenter graphiquement une attaque concrète comme celle de Stuxnet ou celle de DIATEAM avec les outils vus jusqu'ici.
+Etudier Stuxnet de plus près de fait.
+Par ailleurs, une échéance à plus long terme a été fixée : Rédiger pour fin janvier (en plan) et fin février (complet) un document
+scientifique faisant la synthèse de l'avancement de la thèse jusqu'ici en citant les documents étudiés en anglais.
+
+La prochaine présentation aura lieu le 12/01/2018.
