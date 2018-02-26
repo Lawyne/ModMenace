@@ -1,0 +1,22 @@
+La présentation du 23/02/18 s'articule selon deux axes :
+-La synthèse des travaux concernant la réification de la surface d'attaque
+-La présentation de la théorie des jeux dans le cadre de l'aspect dynamique du sujet
+
+La première partie consiste en un rappel de toutes les notions abordées
+jusqu'alors. Elle vise à figer les concepts et à les structurer dans un plan
+dans un objectif de rédaction d'article. Le plan n'a pas fait l'unanimité.
+En effet, le terme "Langages" pour la seconde partie prete à confusion.
+Deplus l'Operational Design est mal introduit à la suite de STIX. Il peut
+être plus pertinent de l'introduire à la suite de la définition de la Cyber
+Threat Intelligence.
+
+La seconde partie présente la théorie des jeux et une application possible
+dans un cadre cyber. La théorie des jeux est bien présentée, l'exemple est
+simple et clair. Toutefois son application a la cyber est expliquée en
+principe, mais l'exemple applicatif n'est pas très parlant. La table des gains
+est trop chargée, une introduction successives des valeurs aurait augmenté la
+lisibilité.
+
+Les travaux à venir sont pertinents. Toutefois Ciprian ajoute une demande
+supplémentaire : La modélisation concrète, en code ou en ecore.
+un exemple applicatif concret est requis lors de la prochaine présentation.
