@@ -1,0 +1,51 @@
+La présentation du 15/03/18 devant Lionel Van Aertryck, Bernard L'Hostis,
+Joël Champeau & Ciprian Teodorov s'articule selon trois axes :
+-La synthèse des travaux concernant la réification de la surface d'attaque
+-La dynamique du modèle via le cas d'étude d'un exemple de la théorie des jeux 
+en cybersécurité
+-Les idées pour une ébauche de moteur d'exécution
+
+ La première partie pose les différentes définitions nécessaires à la
+compréhension des travaux. Les termes "Surface d'attaque", "Attaquant",
+"Vulnérabilité", "Menace" & "Attaque". Il est demandé de détailler le concept de
+"nuire" comme objectif de l'attaquant. J'évoque la taxonomie de cyberattaque AVOIDIT
+et la structure d'arbre d'attaque. Celle-ci provoque une réaction de la part de
+Lionel. L'utilisation de la condition du SAND (ou "Et successif") est recommandée.
+Je fais également le lien entre la Cyber & l'Operational Design grâce à la Cyber
+Threat Intelligence. L'Operational Design a entrainé quelques discussions.
+L'existence d'outils similaires au sein de la DGA a été soulevée, de tels outils
+offriraient une piste intéressante pour la thèse.Enfin je fais le bilan des recherches
+sur le langage de modélisation STIX. Celui-ci présente un point de vue défenseur 
+inhérent selon Bernard & Lionel. Il faudra étudier plus en détail la manière d'inclure
+le point de vue de l'attaquant dans ce langage.
+
+ La seconde partie présente un exemple de jeu afin de se figurer la dynamicité dans
+la modélisation. Les termes de théorie des jeux sont présentés brièvement.
+L'exemple semble avoir suscité de l'interet. Les perspectives restent néanmoins
+encore floues du à la relative jeunesse de la recherche sur cet axe.
+
+ La troisième partie s'intéresse à l'ébauche de concept qui modélise la dynamique des
+différents acteurs dans l'environnement. Cette partie a provoqué un grand nombre de
+remarques. Le choix d'un exemple simple plutot que Stuxnet a été salué, les multiples
+ramifications de l'attaque Stuxnet restant encore très nébuleuses.
+ Une demande immédiate d'ajout sur la modélisation est la notion de trace, c-à-d les
+indices que l'attaque pourrait laisser à l'issue de ses différentes manoeuvres qui
+pourraient aider la défense à comprendre l'attaque.
+ Le point de vue de la défense est également à raffiner, puisqu'il est à noter que la
+connaissance du système par la défense n'est pas parfaite. En effet, les pannes, les
+maintenances & les altérations dues à un attaquant sont des modifications que la
+défense ne maitrise pas ce qui doit être pris en compte dans sa vision du système.
+ Par ailleurs, la défense ne fait pas partie intégrante du système, c'est une
+surcouche, de la même manière que pour les attaquants.
+ Le système en lui même évolue avec le temps. Il possède une configuration nominale,
+mais il peut subir de la casse ou des pannes au cours du temps, il peut également
+subir des mises à jour à intervalles réguliers, ceci devrait se modéliser par
+l'entrée d'une entité de maintenance dans le système à certaines périodes.
+Globalement, le système est soumis à un cycle de vie plus qu'à une fonctionnement
+statique.
+ Enfin il est à noter qu'il faudra marier la dynamicité de l'attaque à travers les
+arbres et l'évolution du système dans le temps ainsi que les différentes stratégies
+de la défense.
+
+Il est prévu de garder le contact par mail pour la suite de la thèse, en plus d'une
+prochaine rencontre à l'ENSTA Bretagne.

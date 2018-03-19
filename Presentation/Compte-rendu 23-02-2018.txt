@@ -6,7 +6,7 @@ La première partie consiste en un rappel de toutes les notions abordées
 jusqu'alors. Elle vise à figer les concepts et à les structurer dans un plan
 dans un objectif de rédaction d'article. Le plan n'a pas fait l'unanimité.
 En effet, le terme "Langages" pour la seconde partie prete à confusion.
-Deplus l'Operational Design est mal introduit à la suite de STIX. Il peut
+De plus l'Operational Design est mal introduit à la suite de STIX. Il peut
 être plus pertinent de l'introduire à la suite de la définition de la Cyber
 Threat Intelligence.
 
