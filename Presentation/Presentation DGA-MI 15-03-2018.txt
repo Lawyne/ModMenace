@@ -14,15 +14,15 @@ Lionel. L'utilisation de la condition du SAND (ou "Et successif") est recommandé
 Je fais également le lien entre la Cyber & l'Operational Design grâce à la Cyber
 Threat Intelligence. L'Operational Design a entrainé quelques discussions.
 L'existence d'outils similaires au sein de la DGA a été soulevée, de tels outils
-offriraient une piste intéressante pour la thèse.Enfin je fais le bilan des recherches
+offriraient une piste intéressante pour la thèse. Enfin je fais le bilan des recherches
 sur le langage de modélisation STIX. Celui-ci présente un point de vue défenseur 
 inhérent selon Bernard & Lionel. Il faudra étudier plus en détail la manière d'inclure
-le point de vue de l'attaquant dans ce langage.
+le point de vue de l'attaquant dans STIX.
 
  La seconde partie présente un exemple de jeu afin de se figurer la dynamicité dans
 la modélisation. Les termes de théorie des jeux sont présentés brièvement.
 L'exemple semble avoir suscité de l'interet. Les perspectives restent néanmoins
-encore floues du à la relative jeunesse de la recherche sur cet axe.
+encore floues du à la relative jeunesse de mes recherches sur cet axe.
 
  La troisième partie s'intéresse à l'ébauche de concept qui modélise la dynamique des
 différents acteurs dans l'environnement. Cette partie a provoqué un grand nombre de
@@ -43,9 +43,18 @@ subir des mises à jour à intervalles réguliers, ceci devrait se modéliser par
 l'entrée d'une entité de maintenance dans le système à certaines périodes.
 Globalement, le système est soumis à un cycle de vie plus qu'à une fonctionnement
 statique.
- Enfin il est à noter qu'il faudra marier la dynamicité de l'attaque à travers les
-arbres et l'évolution du système dans le temps ainsi que les différentes stratégies
-de la défense.
+ Enfin il est à noter qu'il faudra marier la dynamicité de l'attaque et l'évolution 
+du système dans le temps ainsi que les différentes stratégies de la défense.
+
+ Les questions soulevées par cet échange sont les suivantes:
+- Quels sont les outils de design opérationnel existants ?
+- Quels sont les aspects de la théorie des jeux à creuser ?
+- Comment modéliser la dynamicité de l'attaquant en rapport avec le système ?
+
+ Voici les travaux prévus par la suite:
+- Mise en rapport de STIX et du point de vue de l'attaquant
+- Etude de la théorie des jeux
+- Etude des systèmes SCADA
 
 Il est prévu de garder le contact par mail pour la suite de la thèse, en plus d'une
-prochaine rencontre à l'ENSTA Bretagne.
+prochaine rencontre à l'ENSTA Bretagne fin avril.
