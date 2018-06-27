@@ -21,17 +21,18 @@ public class MSystem {
 
     public boolean contains(MEntity e){
         return entities.indexOf(e) != -1;
-
     }
 
     public boolean contains(MLink l){
         return links.indexOf(l) != -1;
     }
 
+    //to be modified
     public void remove(MEntity e){
         entities.remove(e);
     }
 
+    //to be modified
     public void remove(MLink l){
         links.remove(l);
     }
