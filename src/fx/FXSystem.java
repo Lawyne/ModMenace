@@ -2,8 +2,10 @@ package fx;
 
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;
+import javafx.util.Pair;
 import model.MEntity;
 import model.MLink;
+import model.MSetSystem;
 import model.MSystem;
 
 import java.util.*;
@@ -15,9 +17,9 @@ public class FXSystem extends Pane {
     private final Group vertices;
     private final Group edges;
 
-    private MSystem system;
+    private MSetSystem system;
 
-    public FXSystem(MSystem system){
+    public FXSystem(MSetSystem system){
         super();
         this.minHeight(FXConstants.HEIGHT);
         this.minWidth(FXConstants.WIDTH);
@@ -26,6 +28,7 @@ public class FXSystem extends Pane {
         this.edges=new Group();
         this.getChildren().add(edges);
         this.getChildren().add(vertices);
+
         this.system = system;
 
         this.entityFXVertexHashMap = new HashMap<MEntity, FXVertex>();
@@ -37,11 +40,10 @@ public class FXSystem extends Pane {
             this.edges.getChildren().add(fxEdge);
         }
         for (MEntity entity : system.getEntities()){
-            FXVertex fxVertex = new FXVertex(entity);
+            FXVertex fxVertex = new FXVertex(entity,system.getCoordinates(entity));
             entityFXVertexHashMap.put(entity, fxVertex);
             this.vertices.getChildren().add(fxVertex);
         }
-
 
         //Binding Edges Starts
         Set<Entry<MEntity, FXVertex>> setVertices = entityFXVertexHashMap.entrySet();
@@ -71,11 +73,10 @@ public class FXSystem extends Pane {
 
     //adds entity to the system
     public void addVertex(MEntity entity){
-        FXVertex fxVertex = new FXVertex(entity);
+        system.addEntity(entity);
+        FXVertex fxVertex = new FXVertex(entity,system.getCoordinates(entity));
         entityFXVertexHashMap.put(entity, fxVertex);
         this.vertices.getChildren().add(fxVertex);
-        //vertices.toFront();
-        system.addEntity(entity);
     }
 
     //adds a random new vertex when no argument
@@ -89,7 +90,6 @@ public class FXSystem extends Pane {
         linkFXEdgeHashMap.put(link, fxEdge);
         this.edges.getChildren().add(fxEdge);
         bind(fxEdge);
-        //edges.toBack();
         system.addLink(link);
     }
 
