@@ -8,4 +8,4 @@ This folder contains public material used in meetings.
 This folder contains internal presentations showcasing the advancement of the project.
 
 ## 3 src
-This folder contains a Java implementation of the thesis
+This folder contains a Java implementation of the thesis.
