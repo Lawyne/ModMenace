@@ -11,18 +11,22 @@ public class MSystem {
         links = new LinkedList<>();
     }
 
+    //adds entity ent to the system
     public void addEntity(MEntity ent){
         entities.add(ent);
     }
 
+    //adds link link to the system
     public void addLink(MLink link){
         links.add(link);
     }
 
+    //checks if system contains e
     public boolean contains(MEntity e){
         return entities.indexOf(e) != -1;
     }
 
+    //checks if system contains l
     public boolean contains(MLink l){
         return links.indexOf(l) != -1;
     }
@@ -37,10 +41,12 @@ public class MSystem {
         links.remove(l);
     }
 
+    //return set of entities as a LinkedList
     public LinkedList<MEntity> getEntities() {
         return entities;
     }
 
+    //return set of links as a LinkedList
     public LinkedList<MLink> getLinks() {
         return links;
     }
