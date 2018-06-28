@@ -99,7 +99,7 @@ public class FXSystem extends Pane {
         MEntity source = randomEntity();
         MEntity target = randomEntity();
 
-        MLink link = new MLink(target,"" + (int) (Math.random()*99999999));
+        MLink link = new MLink(target);
         source.addLink(link);
 
         addEdge(link);
