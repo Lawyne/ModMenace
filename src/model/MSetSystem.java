@@ -30,18 +30,20 @@ public class MSetSystem{
         this.dirty = dirty;
     }
 
-    //return random tuple of %age for x & y assignments
+    //return random double tuple (between 0 & 1) for x & y assignments
     private Pair<Double,Double> generateCoordinates(){
-        double randomX = Math.random()*100;
-        double randomY = Math.random()*100;
+        double randomX = Math.random();
+        double randomY = Math.random();
 
         return new Pair<>(randomX,randomY);
     }
 
+    public Pair<Double,Double> getCoordinates(MEntity ent){
+        return coordinates.get(ent);
+    }
+
     public void addEntity(MEntity ent) {
         system.addEntity(ent);
-
-
         coordinates.put(ent,generateCoordinates());
         dirty = true;
     }

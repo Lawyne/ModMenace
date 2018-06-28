@@ -9,12 +9,15 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import model.MEntity;
 import model.MLink;
+import model.MSetSystem;
 import model.MSystem;
 
 public class TestFX extends Application{
 
     Button buttonVertex;
     Button buttonEdge;
+    Button buttonVertex1;
+    Button buttonEdge1;
 
     public static void main(String[] args) {
         launch(args);
@@ -72,13 +75,18 @@ public class TestFX extends Application{
         sys.addLink(IB);
         sys.addLink(RI);
 
-        FXSystem fxSystem = new FXSystem(sys);
+        MSetSystem setSystem = new MSetSystem(sys);
 
+        FXSystem fxSystem = new FXSystem(setSystem);
+        FXSystem fxSystem1 = new FXSystem(setSystem);
+
+        /*
         for (int i = 0; i < 1000 ; i++) {
             fxSystem.addVertex();
             fxSystem.addEdge();
             fxSystem.addEdge();
         }
+        */
 
         buttonEdge = new Button("New edge");
         buttonEdge.setOnAction(e ->fxSystem.addEdge());
@@ -86,14 +94,22 @@ public class TestFX extends Application{
         buttonVertex = new Button("New vertex");
         buttonVertex.setOnAction(e ->fxSystem.addVertex());
 
+        buttonEdge1 = new Button("New edge");
+        buttonEdge1.setOnAction(e ->fxSystem1.addEdge());
+
+        buttonVertex1 = new Button("New vertex");
+        buttonVertex1.setOnAction(e ->fxSystem1.addVertex());
+
         HBox buttons = new HBox();
         buttons.getChildren().add(buttonVertex);
         buttons.getChildren().add(buttonEdge);
+        buttons.getChildren().add(buttonVertex1);
+        buttons.getChildren().add(buttonEdge1);
 
-        BorderPane root = new BorderPane(fxSystem, null, null, buttons, null);
+        BorderPane root = new BorderPane(null, null, fxSystem1, buttons, fxSystem);
         root.setMargin(fxSystem,new Insets(FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN));
 
-        Scene scene = new Scene(root, FXConstants.WIDTH + (2 * FXConstants.MARGIN), FXConstants.HEIGHT + (2 * FXConstants.MARGIN));
+        Scene scene = new Scene(root, 2*FXConstants.WIDTH + (2 * FXConstants.MARGIN), FXConstants.HEIGHT + (2 * FXConstants.MARGIN));
         primaryStage.setScene(scene);
         primaryStage.show();
     }
