@@ -8,8 +8,8 @@ import java.util.LinkedList;
 public class MSetSystem{
 
     protected MSystem system;
-    protected HashMap<MEntity,Pair<Double,Double>> coordinates;
-    protected boolean dirty;
+    protected HashMap<MEntity,Pair<Double,Double>> coordinates; //Hashmap of entities coordinates
+    protected boolean dirty; //Observation boolean
 
     public MSetSystem(MSystem mSystem){
         this.system = mSystem;
@@ -22,10 +22,12 @@ public class MSetSystem{
         }
     }
 
+    //check if dirty
     public boolean isDirty() {
         return dirty;
     }
 
+    //set dirty
     public void setDirty(boolean dirty) {
         this.dirty = dirty;
     }
@@ -38,25 +40,30 @@ public class MSetSystem{
         return new Pair<>(randomX,randomY);
     }
 
+    //return the coordinates assigned to the entity ent
     public Pair<Double,Double> getCoordinates(MEntity ent){
         return coordinates.get(ent);
     }
 
+    //add the entity ent to the system
     public void addEntity(MEntity ent) {
         system.addEntity(ent);
         coordinates.put(ent,generateCoordinates());
         dirty = true;
     }
 
+    //add the link link to the system
     public void addLink(MLink link) {
         system.addLink(link);
         dirty = true;
     }
 
+    //returns true if system contains e, false otherwise
     public boolean contains(MEntity e){
         return system.contains(e);
     }
 
+    //returns true if system contains l, false otherwise
     public boolean contains(MLink l){
         return system.contains(l);
     }
@@ -74,10 +81,12 @@ public class MSetSystem{
         dirty=true;
     }
 
+    //return the entity set of the system as a LinkedList
     public LinkedList<MEntity> getEntities() {
         return system.getEntities();
     }
 
+    //return the link set of the system as a LinkedList
     public LinkedList<MLink> getLinks() {
         return system.getLinks();
     }
