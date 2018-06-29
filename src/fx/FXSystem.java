@@ -40,7 +40,7 @@ public class FXSystem extends Pane {
             this.edges.getChildren().add(fxEdge);
         }
         for (MEntity entity : system.getEntities()){
-            FXVertex fxVertex = new FXVertex(entity,system.getCoordinates(entity));
+            FXVertex fxVertex = new FXVertex(entity,system.getCoordinates(entity),system.getColor(entity));
             entityFXVertexHashMap.put(entity, fxVertex);
             this.vertices.getChildren().add(fxVertex);
         }
@@ -74,7 +74,7 @@ public class FXSystem extends Pane {
     //adds entity to the system
     public void addVertex(MEntity entity){
         system.addEntity(entity);
-        FXVertex fxVertex = new FXVertex(entity,system.getCoordinates(entity));
+        FXVertex fxVertex = new FXVertex(entity,system.getCoordinates(entity),system.getColor(entity));
         entityFXVertexHashMap.put(entity, fxVertex);
         this.vertices.getChildren().add(fxVertex);
     }

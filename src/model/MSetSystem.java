@@ -1,5 +1,6 @@
 package model;
 
+import javafx.scene.paint.Color;
 import javafx.util.Pair;
 
 import java.util.HashMap;
@@ -9,16 +10,19 @@ public class MSetSystem{
 
     protected MSystem system;
     protected HashMap<MEntity,Pair<Double,Double>> coordinates; //Hashmap of entities coordinates
+    protected HashMap<MEntity,Color> colorHashMap;
     protected boolean dirty; //Observation boolean
 
     public MSetSystem(MSystem mSystem){
         this.system = mSystem;
         this.coordinates = new HashMap<>();
+        this.colorHashMap = new HashMap<>();
         this.dirty=true;
 
-        //coordinates assignment
+        //coordinates & color assignment
         for (MEntity ent: system.getEntities()) {
             coordinates.put(ent,generateCoordinates());
+            colorHashMap.put(ent,generateColor());
         }
     }
 
@@ -45,10 +49,19 @@ public class MSetSystem{
         return coordinates.get(ent);
     }
 
+    private Color generateColor(){
+        return Color.color(Math.random(),Math.random(),Math.random());
+    }
+
+    public Color getColor(MEntity ent){
+        return colorHashMap.get(ent);
+    }
+
     //add the entity ent to the system
     public void addEntity(MEntity ent) {
         system.addEntity(ent);
         coordinates.put(ent,generateCoordinates());
+        colorHashMap.put(ent,generateColor());
         dirty = true;
     }
 

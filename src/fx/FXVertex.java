@@ -49,6 +49,14 @@ public class FXVertex extends Circle{
         this.entity = e;
     }
 
+    public FXVertex(MEntity e, Pair<Double,Double> coord,Color color){
+        super(  (int) ( FXConstants.WIDTH * coord.getKey()),
+                (int) ( FXConstants.HEIGHT * coord.getValue()),
+                FXConstants.RADIUS,
+                color  );
+        this.entity = e;
+    }
+
     public MEntity getEntity() {
         return entity;
     }
