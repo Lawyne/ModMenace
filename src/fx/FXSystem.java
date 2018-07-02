@@ -156,4 +156,33 @@ public class FXSystem extends Pane {
         bindStart(fxEdge);
     }
 
+    //refreshes the entities
+    private void addNewEntities(){
+        for (MEntity entity : system.getEntities()){
+            if (!entityFXVertexHashMap.containsKey(entity)) { //checks if edge already exists
+                FXVertex fxVertex = new FXVertex(entity, system.getCoordinates(entity), system.getColor(entity));
+                entityFXVertexHashMap.put(entity, fxVertex);
+                this.vertices.getChildren().add(fxVertex);
+            }
+        }
+    }
+
+    //refreshes the links
+    private void addNewLinks(){
+        for (MLink link : system.getLinks()){ //checks if vertex already exists
+            if(!linkFXEdgeHashMap.containsKey(link)){
+                FXEdge fxEdge = new FXEdge(link);
+                linkFXEdgeHashMap.put(link, fxEdge);
+                this.edges.getChildren().add(fxEdge);
+
+                bind(fxEdge);
+            }
+        }
+    }
+
+    //refreshes the system
+    public void update(){
+        addNewEntities();
+        addNewLinks();
+    }
 }

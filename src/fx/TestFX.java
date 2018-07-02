@@ -16,6 +16,7 @@ public class TestFX extends Application{
 
     Button buttonVertex;
     Button buttonEdge;
+    Button buttonRefresh;
     Button buttonVertex1;
     Button buttonEdge1;
 
@@ -94,6 +95,12 @@ public class TestFX extends Application{
         buttonVertex = new Button("New vertex");
         buttonVertex.setOnAction(e ->fxSystem.addVertex());
 
+        buttonRefresh = new Button("Refresh");
+        buttonRefresh.setOnAction(e -> {
+            fxSystem.update();
+            fxSystem1.update();
+        });
+
         buttonEdge1 = new Button("New edge");
         buttonEdge1.setOnAction(e ->fxSystem1.addEdge());
 
@@ -103,6 +110,7 @@ public class TestFX extends Application{
         HBox buttons = new HBox();
         buttons.getChildren().add(buttonVertex);
         buttons.getChildren().add(buttonEdge);
+        buttons.getChildren().add(buttonRefresh);
         buttons.getChildren().add(buttonVertex1);
         buttons.getChildren().add(buttonEdge1);
 
