@@ -1,6 +1,8 @@
 # ModMenace
 This project contains works related to the thesis "ModMenace"
 
+![GraphDisplay](GraphDisplay.PNG)
+
 ## 1 Poster
 This folder contains public material used in meetings.
 
