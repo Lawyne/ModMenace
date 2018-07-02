@@ -9,22 +9,22 @@ import java.util.LinkedList;
 public class FXController {
 
     protected MSetSystem system;
-    protected LinkedList<FXSystem> observers;
+    protected LinkedList<FXView> observers;
 
     public FXController(MSetSystem system){
         this.system = system;
-        this.observers = new LinkedList<FXSystem>();
+        this.observers = new LinkedList<FXView>();
     }
 
     //adds observers
-    public void addObserver(FXSystem fxSystem){
-        observers.add(fxSystem);
-        fxSystem.addController(this);
+    public void addObserver(FXView fxView){
+        observers.add(fxView);
+        fxView.addController(this);
     }
 
     //updates all observers
     public void updateAll(){
-        for (FXSystem observer : observers) {
+        for (FXView observer : observers) {
             observer.update();
         }
     }

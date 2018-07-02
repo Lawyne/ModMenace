@@ -80,10 +80,10 @@ public class TestFX extends Application{
 
         FXController controller = new FXController(setSystem);
 
-        FXSystem fxSystem = new FXSystem(setSystem);
-        controller.addObserver(fxSystem);
-        FXSystem fxSystem1 = new FXSystem(setSystem);
-        controller.addObserver(fxSystem1);
+        FXView fxView = new FXView(setSystem);
+        controller.addObserver(fxView);
+        FXView fxView1 = new FXView(setSystem);
+        controller.addObserver(fxView1);
 
         /*
         for (int i = 0; i < 1000 ; i++) {
@@ -94,22 +94,22 @@ public class TestFX extends Application{
         */
 
         buttonEdge = new Button("New edge");
-        buttonEdge.setOnAction(e ->fxSystem.addEdge());
+        buttonEdge.setOnAction(e ->fxView.addEdge());
 
         buttonVertex = new Button("New vertex");
-        buttonVertex.setOnAction(e ->fxSystem.addVertex());
+        buttonVertex.setOnAction(e ->fxView.addVertex());
 
         buttonRefresh = new Button("Refresh");
         buttonRefresh.setOnAction(e -> {
-            fxSystem.update();
-            fxSystem1.update();
+            fxView.update();
+            fxView1.update();
         });
 
         buttonEdge1 = new Button("New edge");
-        buttonEdge1.setOnAction(e ->fxSystem1.addEdge());
+        buttonEdge1.setOnAction(e ->fxView1.addEdge());
 
         buttonVertex1 = new Button("New vertex");
-        buttonVertex1.setOnAction(e ->fxSystem1.addVertex());
+        buttonVertex1.setOnAction(e ->fxView1.addVertex());
 
         HBox buttons = new HBox();
         buttons.getChildren().add(buttonVertex);
@@ -118,10 +118,11 @@ public class TestFX extends Application{
         buttons.getChildren().add(buttonVertex1);
         buttons.getChildren().add(buttonEdge1);
 
-        BorderPane root = new BorderPane(null, null, fxSystem1, buttons, fxSystem);
-        root.setMargin(fxSystem,new Insets(FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN));
+        BorderPane root = new BorderPane(null, null, fxView, buttons, fxView1);
+        root.setMargin(fxView,new Insets(FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN));
+        root.setMargin(fxView1,new Insets(FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN));
 
-        Scene scene = new Scene(root, 2*FXConstants.WIDTH + (2 * FXConstants.MARGIN), FXConstants.HEIGHT + (2 * FXConstants.MARGIN));
+        Scene scene = new Scene(root, 2*FXConstants.WIDTH + (4 * FXConstants.MARGIN), FXConstants.HEIGHT + (4 * FXConstants.MARGIN));
         primaryStage.setScene(scene);
         primaryStage.show();
     }

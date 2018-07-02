@@ -11,7 +11,7 @@ import model.MSystem;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class FXSystem extends Pane {
+public class FXView extends Pane {
     private final HashMap<MEntity,FXVertex> entityFXVertexHashMap;
     private final HashMap<MLink,FXEdge> linkFXEdgeHashMap;
     private final Group vertices;
@@ -20,7 +20,7 @@ public class FXSystem extends Pane {
     private MSetSystem system;
     private FXController controller;
 
-    public FXSystem(MSetSystem system){
+    public FXView(MSetSystem system){
         super();
         this.minHeight(FXConstants.HEIGHT);
         this.minWidth(FXConstants.WIDTH);
