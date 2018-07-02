@@ -78,8 +78,12 @@ public class TestFX extends Application{
 
         MSetSystem setSystem = new MSetSystem(sys);
 
+        FXController controller = new FXController(setSystem);
+
         FXSystem fxSystem = new FXSystem(setSystem);
+        controller.addObserver(fxSystem);
         FXSystem fxSystem1 = new FXSystem(setSystem);
+        controller.addObserver(fxSystem1);
 
         /*
         for (int i = 0; i < 1000 ; i++) {

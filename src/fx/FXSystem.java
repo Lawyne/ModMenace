@@ -18,6 +18,7 @@ public class FXSystem extends Pane {
     private final Group edges;
 
     private MSetSystem system;
+    private FXController controller;
 
     public FXSystem(MSetSystem system){
         super();
@@ -71,12 +72,13 @@ public class FXSystem extends Pane {
 
     }
 
+    public void addController(FXController controller){
+        this.controller = controller;
+    }
+
     //adds entity to the system
     public void addVertex(MEntity entity){
-        system.addEntity(entity);
-        FXVertex fxVertex = new FXVertex(entity,system.getCoordinates(entity),system.getColor(entity));
-        entityFXVertexHashMap.put(entity, fxVertex);
-        this.vertices.getChildren().add(fxVertex);
+        controller.addEntity(entity);
     }
 
     //adds a random new vertex when no argument
@@ -86,11 +88,7 @@ public class FXSystem extends Pane {
 
     //adds link to the system
     public void addEdge(MLink link){
-        FXEdge fxEdge = new FXEdge(link);
-        linkFXEdgeHashMap.put(link, fxEdge);
-        this.edges.getChildren().add(fxEdge);
-        bind(fxEdge);
-        system.addLink(link);
+        controller.addLink(link);
     }
 
     //adds a random new edge when no argument
