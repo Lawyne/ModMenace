@@ -2,9 +2,11 @@ package fx;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -116,6 +118,7 @@ public class TestFX extends Application{
         buttonVertex1 = new Button("New vertex");
         buttonVertex1.setOnAction(e ->fxView1.addVertex());
 
+        /*
         HBox buttons = new HBox();
         buttons.getChildren().add(buttonVertex);
         buttons.getChildren().add(buttonEdge);
@@ -132,6 +135,33 @@ public class TestFX extends Application{
         root.setMargin(fxView1,new Insets(FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN));
 
         Scene scene = new Scene(root, 3*FXConstants.WIDTH + (4 * FXConstants.MARGIN), FXConstants.HEIGHT + (4 * FXConstants.MARGIN));
+        */
+
+
+        HBox buttons = new HBox();
+        buttons.setAlignment(Pos.CENTER);
+        buttons.getChildren().add(buttonVertex);
+        buttons.getChildren().add(buttonEdge);
+        HBox goldenButtons = new HBox();
+        goldenButtons.setAlignment(Pos.CENTER);
+        goldenButtons.getChildren().add(buttonGoldenVertex);
+        goldenButtons.getChildren().add(buttonGoldenEdge);
+        HBox buttons1 = new HBox();
+        buttons1.setAlignment(Pos.CENTER);
+        buttons1.getChildren().add(buttonVertex1);
+        buttons1.getChildren().add(buttonEdge1);
+
+        GridPane root = new GridPane();
+        root.setAlignment(Pos.CENTER);
+        root.add(fxView,0,0);
+        root.add(goldenView,1,0);
+        root.add(fxView1,2,0);
+        root.add(buttons,0,1);
+        root.add(goldenButtons,1,1);
+        root.add(buttons1,2,1);
+
+        Scene scene = new Scene(root, 3*FXConstants.WIDTH + (4 * FXConstants.MARGIN), FXConstants.HEIGHT + (4 * FXConstants.MARGIN));
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }

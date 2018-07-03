@@ -164,12 +164,11 @@ public class FXView extends Pane {
 
     //adds entity
     private void addNewEntity(MObject stuff){
-
-            if (!entityFXVertexHashMap.containsKey(stuff)) { //checks if edge already exists
-                FXVertex fxVertex = new FXVertex((MEntity) stuff, system.getCoordinates((MEntity) stuff), system.getColor((MEntity) stuff));
-                entityFXVertexHashMap.put((MEntity) stuff, fxVertex);
-                this.vertices.getChildren().add(fxVertex);
-            }
+        if (!entityFXVertexHashMap.containsKey(stuff)) { //checks if edge already exists
+            FXVertex fxVertex = new FXVertex((MEntity) stuff, system.getCoordinates((MEntity) stuff), system.getColor((MEntity) stuff));
+            entityFXVertexHashMap.put((MEntity) stuff, fxVertex);
+            this.vertices.getChildren().add(fxVertex);
+        }
 
     }
 
