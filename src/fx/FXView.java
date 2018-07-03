@@ -3,10 +3,7 @@ package fx;
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;
 import javafx.util.Pair;
-import model.MEntity;
-import model.MLink;
-import model.MSetSystem;
-import model.MSystem;
+import model.*;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -182,5 +179,11 @@ public class FXView extends Pane {
     public void update(){
         addNewEntities();
         addNewLinks();
+    }
+
+    //refreshes the system with a given object
+    public void update(MObject stuff){
+        if(stuff.isEntity()){addNewEntities();}
+        if(stuff.isLink()){addNewLinks();}
     }
 }

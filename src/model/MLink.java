@@ -40,4 +40,14 @@ public class MLink extends MObject{
         return str;
     }
 
+    @Override
+    public boolean isEntity() {
+        return false;
+    }
+
+    @Override
+    public boolean isLink() {
+        return true;
+    }
+
 }

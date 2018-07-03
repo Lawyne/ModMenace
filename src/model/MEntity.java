@@ -41,4 +41,14 @@ public class MEntity extends MObject{
         return name;
     }
 
+    @Override
+    public boolean isEntity() {
+        return true;
+    }
+
+    @Override
+    public boolean isLink() {
+        return false;
+    }
+
 }
