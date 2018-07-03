@@ -16,9 +16,23 @@ public class MSystem {
         entities.add(ent);
     }
 
+    //adds entities ents to the system
+    public void addEntities(LinkedList<MEntity> ents){
+        for (MEntity ent: ents) {
+            addEntity(ent);
+        }
+    }
+
     //adds link link to the system
     public void addLink(MLink link){
         links.add(link);
+    }
+
+    //adds links links to the system
+    public void addLinks(LinkedList<MLink> links){
+        for (MLink link: links) {
+            addLink(link);
+        }
     }
 
     //checks if system contains e
