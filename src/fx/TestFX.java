@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.MEntity;
 import model.MLink;
@@ -14,6 +15,8 @@ import model.MSystem;
 
 public class TestFX extends Application{
 
+    Button buttonGoldenVertex;
+    Button buttonGoldenEdge;
     Button buttonVertex;
     Button buttonEdge;
     Button buttonVertex1;
@@ -79,6 +82,9 @@ public class TestFX extends Application{
 
         FXController controller = new FXController(setSystem);
 
+        FXView goldenView = new FXView(setSystem);
+        controller.addObserver(goldenView);
+
         FXView fxView = new FXView(setSystem);
         controller.addObserver(fxView);
         FXView fxView1 = new FXView(setSystem);
@@ -91,6 +97,12 @@ public class TestFX extends Application{
             fxSystem.addEdge();
         }
         */
+
+        buttonGoldenEdge = new Button("New edge");
+        buttonGoldenEdge.setOnAction(e ->goldenView.addEdge());
+
+        buttonGoldenVertex = new Button("New vertex");
+        buttonGoldenVertex.setOnAction(e ->goldenView.addVertex());
 
         buttonEdge = new Button("New edge");
         buttonEdge.setOnAction(e ->fxView.addEdge());
@@ -107,14 +119,19 @@ public class TestFX extends Application{
         HBox buttons = new HBox();
         buttons.getChildren().add(buttonVertex);
         buttons.getChildren().add(buttonEdge);
+        buttons.getChildren().add(new Text("         "));
+        buttons.getChildren().add(buttonGoldenVertex);
+        buttons.getChildren().add(buttonGoldenEdge);
+        buttons.getChildren().add(new Text("         "));
         buttons.getChildren().add(buttonVertex1);
         buttons.getChildren().add(buttonEdge1);
 
-        BorderPane root = new BorderPane(null, null, fxView, buttons, fxView1);
+        BorderPane root = new BorderPane(goldenView, null, fxView, buttons, fxView1);
         root.setMargin(fxView,new Insets(FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN));
+        root.setMargin(goldenView,new Insets(FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN));
         root.setMargin(fxView1,new Insets(FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN));
 
-        Scene scene = new Scene(root, 2*FXConstants.WIDTH + (4 * FXConstants.MARGIN), FXConstants.HEIGHT + (4 * FXConstants.MARGIN));
+        Scene scene = new Scene(root, 3*FXConstants.WIDTH + (4 * FXConstants.MARGIN), FXConstants.HEIGHT + (4 * FXConstants.MARGIN));
         primaryStage.setScene(scene);
         primaryStage.show();
     }

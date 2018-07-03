@@ -162,6 +162,17 @@ public class FXView extends Pane {
         }
     }
 
+    //adds entity
+    private void addNewEntity(MObject stuff){
+
+            if (!entityFXVertexHashMap.containsKey(stuff)) { //checks if edge already exists
+                FXVertex fxVertex = new FXVertex((MEntity) stuff, system.getCoordinates((MEntity) stuff), system.getColor((MEntity) stuff));
+                entityFXVertexHashMap.put((MEntity) stuff, fxVertex);
+                this.vertices.getChildren().add(fxVertex);
+            }
+
+    }
+
     //refreshes the links
     private void addNewLinks(){
         for (MLink link : system.getLinks()){ //checks if vertex already exists
@@ -175,6 +186,17 @@ public class FXView extends Pane {
         }
     }
 
+    //adds link
+    private void addNewLink(MObject stuff){
+        if(!linkFXEdgeHashMap.containsKey((stuff))){ //checks if vertex already exists
+            FXEdge fxEdge = new FXEdge((MLink) stuff);
+            linkFXEdgeHashMap.put((MLink) stuff, fxEdge);
+            this.edges.getChildren().add(fxEdge);
+
+            bind(fxEdge);
+        }
+    }
+
     //refreshes the system
     public void update(){
         addNewEntities();
@@ -183,7 +205,7 @@ public class FXView extends Pane {
 
     //refreshes the system with a given object
     public void update(MObject stuff){
-        if(stuff.isEntity()){addNewEntities();}
-        if(stuff.isLink()){addNewLinks();}
+        if(stuff.isEntity()){addNewEntity(stuff);}
+        if(stuff.isLink()){addNewLink(stuff);}
     }
 }
