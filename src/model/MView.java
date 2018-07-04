@@ -10,4 +10,36 @@ public class MView extends MSystem {
         this.addLinks(mSystem.getLinks());
     }
 
+    @Override
+    public void addLink(MLink link) {
+        super.addLink(link);
+        system.addLink(link);
+    }
+
+    @Override
+    public void addEntity(MEntity ent) {
+        super.addEntity(ent);
+        system.addEntity(ent);
+    }
+
+    @Override
+    public void remove(MLink l) {
+        super.remove(l);
+        system.remove(l);
+    }
+
+    @Override
+    public void remove(MEntity e) {
+        super.remove(e);
+        system.remove(e);
+    }
+
+    public void hide(MLink l){
+        super.remove(l);
+    }
+
+    public void hide(MEntity e){
+        super.remove(e);
+    }
+
 }
