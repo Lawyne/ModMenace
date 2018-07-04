@@ -65,11 +65,19 @@ public class MSetSystem{
         dirty = true;
     }
 
+    public void addEntity(MEntity... ents){
+        for (MEntity e : ents){
+            addEntity(e);
+        }
+    }
+
     //add the link link to the system
     public void addLink(MLink link) {
         system.addLink(link);
         dirty = true;
     }
+
+    public void addLink(MLink... links){system.addLink(links);}
 
     //returns true if system contains e, false otherwise
     public boolean contains(MEntity e){

@@ -16,6 +16,12 @@ public class MSystem {
         entities.add(ent);
     }
 
+    public void addEntity(MEntity... ents){
+        for(MEntity e : ents){
+            addEntity(e);
+        }
+    }
+
     //adds entities ents to the system
     public void addEntities(LinkedList<MEntity> ents){
         for (MEntity ent: ents) {
@@ -26,6 +32,12 @@ public class MSystem {
     //adds link link to the system
     public void addLink(MLink link){
         links.add(link);
+    }
+
+    public void addLink(MLink... links){
+        for(MLink l : links){
+            addLink(l);
+        }
     }
 
     //adds links links to the system
