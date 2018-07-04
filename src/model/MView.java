@@ -13,13 +13,17 @@ public class MView extends MSystem {
     @Override
     public void addLink(MLink link) {
         super.addLink(link);
-        system.addLink(link);
+        if(!system.contains(link)){
+            system.addLink(link);
+        }
     }
 
     @Override
     public void addEntity(MEntity ent) {
         super.addEntity(ent);
-        system.addEntity(ent);
+        if(!system.contains(ent)){
+            system.addEntity(ent);
+        }
     }
 
     @Override
