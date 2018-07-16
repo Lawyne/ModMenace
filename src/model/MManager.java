@@ -5,6 +5,7 @@ import java.util.LinkedList;
 public class MManager {
     protected MSystem mSystem;
     protected LinkedList<MView> mViews;
+    protected MSetSystem mLocations;
 
 
     public MManager(MSystem system, MView... views){
@@ -13,6 +14,7 @@ public class MManager {
         for (MView v: views) {
             mViews.add(v);
         }
+        this.mLocations = new MSetSystem(system);
 
     }
 
