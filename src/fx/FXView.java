@@ -15,7 +15,7 @@ public class FXView extends Pane {
     private final Group edges;
 
     private MSetSystem system;
-    private FXController controller;
+    private MManager controller;
 
     public FXView(MSetSystem system){
         super();
@@ -69,7 +69,7 @@ public class FXView extends Pane {
 
     }
 
-    public void addController(FXController controller){
+    public void addController(MManager controller){
         this.controller = controller;
     }
 
