@@ -10,10 +10,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import model.MEntity;
-import model.MLink;
-import model.MSetSystem;
-import model.MSystem;
+import model.*;
 
 public class TestFX extends Application{
 
@@ -80,16 +77,17 @@ public class TestFX extends Application{
         sys.addLink(IB);
         sys.addLink(RI);
 
-        MSetSystem setSystem = new MSetSystem(sys);
+        //MSetSystem setSystem = new MSetSystem(sys);
+        //FXController controller = new FXController(setSystem);
 
-        FXController controller = new FXController(setSystem);
+        MManager controller = new MManager(sys);
 
-        FXView goldenView = new FXView(setSystem);
+        FXView goldenView = new FXView(controller.getLocations());
         controller.addObserver(goldenView);
 
-        FXView fxView = new FXView(setSystem);
+        FXView fxView = new FXView(controller.getLocations());
         controller.addObserver(fxView);
-        FXView fxView1 = new FXView(setSystem);
+        FXView fxView1 = new FXView(controller.getLocations());
         controller.addObserver(fxView1);
 
         /*

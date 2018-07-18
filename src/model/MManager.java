@@ -9,6 +9,7 @@ public class MManager {
     protected MSystem mSystem;
     protected LinkedList<MView> mViews;
     protected MSetSystem mLocations;
+
     protected LinkedList<FXView> observers;
     protected HashMap<FXView,MSystem> fxViewMSystemHashMap;
 
@@ -20,8 +21,14 @@ public class MManager {
             mViews.add(v);
         }
         this.mLocations = new MSetSystem(system);
+
+        this.observers = new LinkedList<FXView>();
         this.fxViewMSystemHashMap = new HashMap<>();
 
+    }
+
+    public MSetSystem getLocations() {
+        return mLocations;
     }
 
     //adds observers
@@ -39,13 +46,13 @@ public class MManager {
 
     //adds an entity to the system
     public void addEntity(MEntity entity){
-        mSystem.addEntity(entity);
+        mLocations.addEntity(entity);
         updateAll(entity);
     }
 
     //adds a link to the system
     public void addLink(MLink link){
-        mSystem.addLink(link);
+        mLocations.addLink(link);
         updateAll(link);
     }
 

@@ -17,11 +17,14 @@ public class FXController {
         this.observers = new LinkedList<FXView>();
     }
 
+    /* Obsolete code
     //adds observers
     public void addObserver(FXView fxView){
         observers.add(fxView);
         fxView.addController(this);
     }
+    */
+
 
     //updates all observers
     public void updateAll(MObject stuff){
