@@ -80,15 +80,15 @@ public class TestFX extends Application{
         //MSetSystem setSystem = new MSetSystem(sys);
         //FXController controller = new FXController(setSystem);
 
-        MManager controller = new MManager(sys);
+        ///MManager controller = new MManager(sys);
 
-        FXView goldenView = new FXView(controller.getLocations());
-        controller.addObserver(goldenView);
+        ///FXView goldenView = new FXView(controller.getLocations());
+        ///controller.addObserver(goldenView);
 
-        FXView fxView = new FXView(controller.getLocations());
-        controller.addObserver(fxView);
-        FXView fxView1 = new FXView(controller.getLocations());
-        controller.addObserver(fxView1);
+        ///FXView fxView = new FXView(controller.getLocations());
+        ///controller.addObserver(fxView);
+        ///FXView fxView1 = new FXView(controller.getLocations());
+        ///controller.addObserver(fxView1);
 
         /*
         for (int i = 0; i < 1000 ; i++) {
@@ -98,23 +98,23 @@ public class TestFX extends Application{
         }
         */
 
-        buttonGoldenEdge = new Button("New edge");
-        buttonGoldenEdge.setOnAction(e ->goldenView.addEdge());
+        /// buttonGoldenEdge = new Button("New edge");
+        /// buttonGoldenEdge.setOnAction(e ->goldenView.addEdge());
 
-        buttonGoldenVertex = new Button("New vertex");
-        buttonGoldenVertex.setOnAction(e ->goldenView.addVertex());
+        ///   buttonGoldenVertex = new Button("New vertex");
+        ///    buttonGoldenVertex.setOnAction(e ->goldenView.addVertex());
 
-        buttonEdge = new Button("New edge");
-        buttonEdge.setOnAction(e ->fxView.addEdge());
+        ///    buttonEdge = new Button("New edge");
+        ///     buttonEdge.setOnAction(e ->fxView.addEdge());
 
-        buttonVertex = new Button("New vertex");
-        buttonVertex.setOnAction(e ->fxView.addVertex());
+        ///    buttonVertex = new Button("New vertex");
+        ///    buttonVertex.setOnAction(e ->fxView.addVertex());
 
-        buttonEdge1 = new Button("New edge");
-        buttonEdge1.setOnAction(e ->fxView1.addEdge());
+        ///     buttonEdge1 = new Button("New edge");
+        ///     buttonEdge1.setOnAction(e ->fxView1.addEdge());
 
-        buttonVertex1 = new Button("New vertex");
-        buttonVertex1.setOnAction(e ->fxView1.addVertex());
+        ///  buttonVertex1 = new Button("New vertex");
+        ///   buttonVertex1.setOnAction(e ->fxView1.addVertex());
 
         /*
         HBox buttons = new HBox();
@@ -149,7 +149,7 @@ public class TestFX extends Application{
         buttons1.getChildren().add(buttonVertex1);
         buttons1.getChildren().add(buttonEdge1);
 
-        GridPane root = new GridPane();
+        /*GridPane root = new GridPane();
         root.setAlignment(Pos.CENTER);
         root.add(fxView,0,0);
         root.add(goldenView,1,0);
@@ -161,7 +161,7 @@ public class TestFX extends Application{
         Scene scene = new Scene(root, 3*FXConstants.WIDTH + (4 * FXConstants.MARGIN), FXConstants.HEIGHT + (4 * FXConstants.MARGIN));
 
         primaryStage.setScene(scene);
-        primaryStage.show();
+        primaryStage.show();*/
     }
 
 }

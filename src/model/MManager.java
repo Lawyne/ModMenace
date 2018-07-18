@@ -103,7 +103,10 @@ public class MManager {
 
     public void removeEntity(MEntity entity, FXView fxView) {
         if(fxViewRange.get(fxView)==0){
-            //TODO must remove from all
+            for (FXView view: observers) {
+                fxViewMSystemHashMap.get(view).remove(entity);
+
+            }
         }
         else{
 

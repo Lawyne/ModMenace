@@ -196,13 +196,19 @@ public class FXView extends Pane {
 
     }
 
-    private void removeEntities(){
+    //removes deleted entities
+    public void removeEntities(){
         for (MEntity entity: entityFXVertexHashMap.keySet()) {
-            if (!system.contains(entity)){
-                entityFXVertexHashMap.remove(entity);
-                //TODO
-            }
+            removeEntity(entity);
         }
+    }
+
+    //removes deleted entity
+    public void removeEntity(MEntity entity){
+         if (!system.contains(entity)){
+             entityFXVertexHashMap.remove(entity);
+         }
+
     }
 
     //adds new links
@@ -229,10 +235,27 @@ public class FXView extends Pane {
         }
     }
 
+    //removes deleted links
+    public void removeLinks(){
+        for (MLink link: linkFXEdgeHashMap.keySet()) {
+            removeLink(link);
+        }
+    }
+
+    //removes deleted link
+    public void removeLink(MLink link){
+        if (!system.contains(link)){
+            linkFXEdgeHashMap.remove(link);
+        }
+
+    }
+
     //refreshes the system
     public void update(){
         addNewEntities();
+        removeEntities();
         addNewLinks();
+        removeLinks();
     }
 
     //refreshes the system with an added given object

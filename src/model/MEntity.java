@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 public class MEntity extends MObject{
     protected String name;
-    protected LinkedList<MLink> outs; //lists of exiting links
+    protected LinkedList<MLink> outs; //lists of existing links
 
     public MEntity(String name) {
         this.name=name;
