@@ -14,10 +14,11 @@ public class FXView extends Pane {
     private final Group vertices;
     private final Group edges;
 
-    private MSetSystem system;
+    private MSetSystem locations;
+    private MSystem system;
     private MManager controller;
 
-    public FXView(MSetSystem system){
+    public FXView(MSystem system, MSetSystem locations){
         super();
         this.minHeight(FXConstants.HEIGHT);
         this.minWidth(FXConstants.WIDTH);
@@ -27,6 +28,7 @@ public class FXView extends Pane {
         this.getChildren().add(edges);
         this.getChildren().add(vertices);
 
+        this.locations = locations;
         this.system = system;
 
         this.entityFXVertexHashMap = new HashMap<MEntity, FXVertex>();
@@ -38,7 +40,7 @@ public class FXView extends Pane {
             this.edges.getChildren().add(fxEdge);
         }
         for (MEntity entity : system.getEntities()){
-            FXVertex fxVertex = new FXVertex(entity,system.getCoordinates(entity),system.getColor(entity));
+            FXVertex fxVertex = new FXVertex(entity,locations.getCoordinates(entity),locations.getColor(entity));
             entityFXVertexHashMap.put(entity, fxVertex);
             this.vertices.getChildren().add(fxVertex);
         }
@@ -75,7 +77,7 @@ public class FXView extends Pane {
 
     //adds entity to the system
     public void addVertex(MEntity entity){
-        controller.addEntity(entity);
+        controller.addEntity(entity,this);
     }
 
     //adds a random new vertex when no argument
@@ -85,7 +87,7 @@ public class FXView extends Pane {
 
     //adds link to the system
     public void addEdge(MLink link){
-        controller.addLink(link);
+        controller.addLink(link,this);
     }
 
     //adds a random new edge when no argument
@@ -151,11 +153,33 @@ public class FXView extends Pane {
         bindStart(fxEdge);
     }
 
-    //refreshes the entities
+    private void removeVertex(MEntity entity){
+        controller.removeEntity(entity,this);
+    }
+
+    private void removeVertex(){
+        removeVertex(randomEntity());
+    }
+
+    private void removeEdge(MLink link){
+        controller.removeLink(link,this);
+    }
+
+    private void removeEdge(){
+        removeEdge(randomLink());
+    }
+
+    private MLink randomLink() {
+        MLink[] keys = linkFXEdgeHashMap.keySet().toArray(new MLink[0]);
+        MLink mLink = keys[new Random().nextInt(keys.length)];
+        return mLink;
+    }
+
+    //adds new entities
     private void addNewEntities(){
         for (MEntity entity : system.getEntities()){
             if (!entityFXVertexHashMap.containsKey(entity)) { //checks if edge already exists
-                FXVertex fxVertex = new FXVertex(entity, system.getCoordinates(entity), system.getColor(entity));
+                FXVertex fxVertex = new FXVertex(entity, locations.getCoordinates(entity), locations.getColor(entity));
                 entityFXVertexHashMap.put(entity, fxVertex);
                 this.vertices.getChildren().add(fxVertex);
             }
@@ -165,14 +189,23 @@ public class FXView extends Pane {
     //adds entity
     private void addNewEntity(MObject stuff){
         if (!entityFXVertexHashMap.containsKey(stuff)) { //checks if edge already exists
-            FXVertex fxVertex = new FXVertex((MEntity) stuff, system.getCoordinates((MEntity) stuff), system.getColor((MEntity) stuff));
+            FXVertex fxVertex = new FXVertex((MEntity) stuff, locations.getCoordinates((MEntity) stuff), locations.getColor((MEntity) stuff));
             entityFXVertexHashMap.put((MEntity) stuff, fxVertex);
             this.vertices.getChildren().add(fxVertex);
         }
 
     }
 
-    //refreshes the links
+    private void removeEntities(){
+        for (MEntity entity: entityFXVertexHashMap.keySet()) {
+            if (!system.contains(entity)){
+                entityFXVertexHashMap.remove(entity);
+                //TODO
+            }
+        }
+    }
+
+    //adds new links
     private void addNewLinks(){
         for (MLink link : system.getLinks()){ //checks if vertex already exists
             if(!linkFXEdgeHashMap.containsKey(link)){
@@ -202,7 +235,7 @@ public class FXView extends Pane {
         addNewLinks();
     }
 
-    //refreshes the system with a given object
+    //refreshes the system with an added given object
     public void update(MObject stuff){
         if(stuff.isEntity()){addNewEntity(stuff);}
         if(stuff.isLink()){addNewLink(stuff);}
