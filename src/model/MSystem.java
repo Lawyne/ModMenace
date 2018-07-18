@@ -13,7 +13,9 @@ public class MSystem {
 
     //adds entity ent to the system
     public void addEntity(MEntity ent){
-        entities.add(ent);
+        if (!contains(ent)){
+            entities.add(ent);
+        }
     }
 
     public void addEntity(MEntity... ents){
@@ -31,7 +33,9 @@ public class MSystem {
 
     //adds link link to the system
     public void addLink(MLink link){
-        links.add(link);
+        if(!contains(link)){
+            links.add(link);
+        }
     }
 
     public void addLink(MLink... links){
@@ -75,6 +79,11 @@ public class MSystem {
     //return set of links as a LinkedList
     public LinkedList<MLink> getLinks() {
         return links;
+    }
+
+    public void synchronize(MSystem mSystem) {
+        entities = new LinkedList<>(mSystem.getEntities());
+        links = new LinkedList<>(mSystem.getLinks());
     }
 
     @Override

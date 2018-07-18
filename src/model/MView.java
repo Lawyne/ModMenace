@@ -1,15 +1,22 @@
 package model;
 
+import java.util.LinkedList;
+
 public class MView extends MSystem {
     private MSystem system;
+    private LinkedList<MEntity> entities;
+    private LinkedList<MLink> links;
 
     public MView(MSystem mSystem) {
         super();
-        this.system = mSystem;
-        this.addEntities(mSystem.getEntities());
-        this.addLinks(mSystem.getLinks());
+        this.system = mSystem;/*
+        this.entities = new LinkedList<MEntity>();
+        this.links = new LinkedList<MLink>();*/
+        addEntities(mSystem.getEntities());
+        addLinks(mSystem.getLinks());
     }
 
+    /*
     @Override
     public void addLink(MLink link) {
         super.addLink(link);
@@ -45,5 +52,18 @@ public class MView extends MSystem {
     public void hide(MEntity e){
         super.remove(e);
     }
+    */
+/*
+    //checks if system contains e
+    @Override
+    public boolean contains(MEntity e){
+        return entities.indexOf(e) != -1;
+    }
 
+    //checks if system contains l
+    @Override
+    public boolean contains(MLink l){
+        return links.indexOf(l) != -1;
+    }
+*/
 }

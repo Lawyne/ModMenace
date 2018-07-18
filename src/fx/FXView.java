@@ -52,14 +52,17 @@ public class FXView extends Pane {
             Entry<MEntity, FXVertex> entityFXVertexEntry = it1.next();
 
             for(MLink link : entityFXVertexEntry.getKey().getOuts()){
-                FXEdge fxEdge = linkFXEdgeHashMap.get(link);
-                FXVertex fxVertex = entityFXVertexEntry.getValue();
+                if(linkFXEdgeHashMap.containsKey(link)){ //Only links belonging to the view are created
+                    FXEdge fxEdge = linkFXEdgeHashMap.get(link);
+                    FXVertex fxVertex = entityFXVertexEntry.getValue();
 
-                bindStart(fxVertex,fxEdge);
+                    bindStart(fxVertex,fxEdge);
+                }
             }
         }
 
         //Binding Edges Ends
+        //assuming every edge has a valid target in the system
         Set<Entry<MLink, FXEdge>> setEdges = linkFXEdgeHashMap.entrySet();
         Iterator<Map.Entry<MLink, FXEdge>> it2 = setEdges.iterator();
         while(it2.hasNext()){
@@ -153,19 +156,19 @@ public class FXView extends Pane {
         bindStart(fxEdge);
     }
 
-    private void removeVertex(MEntity entity){
+    public void removeVertex(MEntity entity){
         controller.removeEntity(entity,this);
     }
 
-    private void removeVertex(){
+    public void removeVertex(){
         removeVertex(randomEntity());
     }
 
-    private void removeEdge(MLink link){
+    public void removeEdge(MLink link){
         controller.removeLink(link,this);
     }
 
-    private void removeEdge(){
+    public void removeEdge(){
         removeEdge(randomLink());
     }
 
@@ -197,14 +200,14 @@ public class FXView extends Pane {
     }
 
     //removes deleted entities
-    public void removeEntities(){
+    private void removeEntities(){
         for (MEntity entity: entityFXVertexHashMap.keySet()) {
             removeEntity(entity);
         }
     }
 
     //removes deleted entity
-    public void removeEntity(MEntity entity){
+    private void removeEntity(MEntity entity){
          if (!system.contains(entity)){
              entityFXVertexHashMap.remove(entity);
          }
@@ -236,26 +239,31 @@ public class FXView extends Pane {
     }
 
     //removes deleted links
-    public void removeLinks(){
+    private void removeLinks(){
         for (MLink link: linkFXEdgeHashMap.keySet()) {
             removeLink(link);
         }
     }
 
     //removes deleted link
-    public void removeLink(MLink link){
+    private void removeLink(MLink link){
         if (!system.contains(link)){
             linkFXEdgeHashMap.remove(link);
         }
 
     }
 
+    //synchronizes with goldenModel
+    public void synchronize(){
+        controller.synchronize(this);
+    }
+
     //refreshes the system
     public void update(){
-        addNewEntities();
         removeEntities();
-        addNewLinks();
+        addNewEntities();
         removeLinks();
+        addNewLinks();
     }
 
     //refreshes the system with an added given object

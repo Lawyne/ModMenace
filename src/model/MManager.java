@@ -33,6 +33,11 @@ public class MManager {
         return mLocations;
     }
 
+    //adds View on the system
+    public void addMView(MView mView){
+        mViews.add(mView);
+    }
+
     //adds observer corresponding to a MSystem
     public void addObserver(FXView fxView,Integer range, MSystem mSystem){
         observers.add(fxView);
@@ -43,12 +48,21 @@ public class MManager {
     }
 
     //adds observer corresponding to the index i in mViews
-    public void addObserver(FXView fxView, int id, int range){
+    public void addObserver(FXView fxView, Integer range, int id){
         observers.add(fxView);
         fxView.addController(this);
 
         fxViewMSystemHashMap.put(fxView,mViews.get(id));
         fxViewRange.put(fxView,range);
+    }
+
+    //adds goldenObserver
+    public void addObserver(FXView fxView){
+        observers.add(fxView);
+        fxView.addController(this);
+
+        fxViewMSystemHashMap.put(fxView,mSystem);
+        fxViewRange.put(fxView,0);
     }
 
     //returns the nb of mViews in the sys
@@ -64,61 +78,72 @@ public class MManager {
     }
 
     //adds an entity to the system
-    public void addEntity(MEntity entity){
-        mLocations.addEntity(entity);
-        updateAll(entity);
-    }
-
     public void addEntity(MEntity entity, FXView view){
+        LinkedList<FXView> views2Change = sharedKnowledge(view);
         mLocations.addEntity(entity);
+        for (FXView fxView: views2Change) {
+            fxViewMSystemHashMap.get(view).addEntity(entity);
+        }
         //TODO
+        update(views2Change);
     }
 
     //adds a link to the system
-    public void addLink(MLink link){
-        mLocations.addLink(link);
-        updateAll(link);
-    }
-
     public void addLink(MLink link, FXView view){
+        LinkedList<FXView> views2Change = sharedKnowledge(view);
         mLocations.addLink(link);
+        mSystem.addLink(link);
+        for (FXView fxView: views2Change) {
+            fxViewMSystemHashMap.get(view).addLink(link);
+        }
         //TODO
+        update(views2Change);
     }
 
     public LinkedList<FXView> sharedKnowledge(FXView view) {
         LinkedList<FXView> result = new LinkedList<>();
         Integer range = fxViewRange.get(view);
-        for (FXView fxView : observers) {
-            if (fxViewRange.get(fxView)== range) {
-                result.add(fxView);
+        if (range == 0){
+            result=observers;
+        }
+        else{
+            for (FXView fxView : observers) {
+                if (fxViewRange.get(fxView)== range || fxViewRange.get(fxView) == 0) {
+                    result.add(fxView);
+                }
             }
         }
-
         return result;
     }
 
-    public void update(){
+    public void update(LinkedList<FXView> views){
         //TODO
+        for (FXView view: views) {
+            view.update();
+        }
     }
 
     public void removeEntity(MEntity entity, FXView fxView) {
-        if(fxViewRange.get(fxView)==0){
-            for (FXView view: observers) {
-                fxViewMSystemHashMap.get(view).remove(entity);
-
-            }
+        LinkedList<FXView> views2Change = sharedKnowledge(fxView);
+        for (FXView view: views2Change) {
+            fxViewMSystemHashMap.get(view).remove(entity);
         }
-        else{
-
-        }
+        update(views2Change);
     }
 
     public void removeLink(MLink link, FXView fxView) {
-        if(fxViewRange.get(fxView)==0){
-            //TODO must remove from all
+        LinkedList<FXView> views2Change = sharedKnowledge(fxView);
+        for (FXView view: views2Change) {
+            fxViewMSystemHashMap.get(view).remove(link);
         }
-        else{
+        update(views2Change);
+    }
 
+    public void synchronize(FXView fxView) {
+        LinkedList<FXView> views2Change = sharedKnowledge(fxView);
+        for (FXView view : views2Change) {
+            fxViewMSystemHashMap.get(view).synchronize(mSystem);
         }
+        update(views2Change);
     }
 }
