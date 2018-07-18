@@ -7,6 +7,7 @@ import model.MSetSystem;
 
 import java.util.LinkedList;
 
+//Obsolete
 public class FXController {
 
     protected MSetSystem system;
