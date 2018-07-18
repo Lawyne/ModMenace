@@ -92,7 +92,6 @@ public class MManager {
     public void addLink(MLink link, FXView view){
         LinkedList<FXView> views2Change = sharedKnowledge(view);
         mLocations.addLink(link);
-        mSystem.addLink(link);
         for (FXView fxView: views2Change) {
             fxViewMSystemHashMap.get(view).addLink(link);
         }
