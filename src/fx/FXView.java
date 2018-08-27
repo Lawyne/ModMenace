@@ -1,5 +1,6 @@
 package fx;
 
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;
 import javafx.util.Pair;
@@ -7,10 +8,11 @@ import model.*;
 
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class FXView extends Pane {
-    private final HashMap<MEntity,FXVertex> entityFXVertexHashMap;
-    private final HashMap<MLink,FXEdge> linkFXEdgeHashMap;
+    private final ConcurrentHashMap<MEntity,FXVertex> entityFXVertexHashMap;
+    private final ConcurrentHashMap<MLink,FXEdge> linkFXEdgeHashMap;
     private final Group vertices;
     private final Group edges;
 
@@ -31,8 +33,8 @@ public class FXView extends Pane {
         this.locations = locations;
         this.system = system;
 
-        this.entityFXVertexHashMap = new HashMap<MEntity, FXVertex>();
-        this.linkFXEdgeHashMap = new HashMap<MLink,FXEdge>();
+        this.entityFXVertexHashMap = new ConcurrentHashMap<MEntity, FXVertex>();
+        this.linkFXEdgeHashMap = new ConcurrentHashMap<MLink,FXEdge>();
 
         for (MLink link : system.getLinks()){
             FXEdge fxEdge = new FXEdge(link);
@@ -157,12 +159,12 @@ public class FXView extends Pane {
     }
 
     public void removeVertex(MEntity entity){
-        controller.removeEntity(entity,this);
+        Platform.runLater(()->controller.removeEntity(entity,this));
     }
 
     public void removeVertex(){
-        removeVertex(randomEntity());
-    }
+    removeVertex(randomEntity());
+}
 
     public void removeEdge(MLink link){
         controller.removeLink(link,this);
@@ -209,8 +211,9 @@ public class FXView extends Pane {
     //removes deleted entity
     private void removeEntity(MEntity entity){
          if (!system.contains(entity)){
-             entityFXVertexHashMap.remove(entity);
-         }
+             FXVertex fxVertex = entityFXVertexHashMap.remove(entity);
+             this.vertices.getChildren().remove(fxVertex);
+         } //TODO Deletion des liens dépendants
 
     }
 
@@ -248,8 +251,9 @@ public class FXView extends Pane {
     //removes deleted link
     private void removeLink(MLink link){
         if (!system.contains(link)){
-            linkFXEdgeHashMap.remove(link);
-        }
+            FXEdge fxEdge = linkFXEdgeHashMap.remove(link);
+            this.edges.getChildren().remove(fxEdge);
+        } //TODO Cohérence vertices connectés
 
     }
 

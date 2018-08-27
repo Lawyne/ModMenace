@@ -129,10 +129,10 @@ public class TestFX extends Application{
         buttonVertex.setOnAction(e ->fxView.addVertex());
 
         buttonRemoveEdge = new Button("Remove edge");
-        buttonRemoveEdge.setOnAction(e ->fxView.removeVertex());
+        buttonRemoveEdge.setOnAction(e ->fxView.removeEdge());
 
         buttonRemoveVertex = new Button("Remove vertex");
-        buttonRemoveVertex.setOnAction(e ->fxView.removeEdge());
+        buttonRemoveVertex.setOnAction(e ->fxView.removeVertex());
 
         buttonSync = new Button("Synchro");
         buttonSync.setOnAction(e->fxView.synchronize());
@@ -145,10 +145,10 @@ public class TestFX extends Application{
         buttonVertex1.setOnAction(e ->fxView1.addVertex());
 
         buttonRemoveEdge1 = new Button("Remove edge");
-        buttonRemoveEdge1.setOnAction(e ->fxView1.removeVertex());
+        buttonRemoveEdge1.setOnAction(e ->fxView1.removeEdge());
 
         buttonRemoveVertex1 = new Button("Remove vertex");
-        buttonRemoveVertex1.setOnAction(e ->fxView1.removeEdge());
+        buttonRemoveVertex1.setOnAction(e ->fxView1.removeVertex());
 
         buttonSync1 = new Button("Synchro");
         buttonSync1.setOnAction(e->fxView1.synchronize());
@@ -195,6 +195,8 @@ public class TestFX extends Application{
         buttons1.getChildren().add(buttonSync1);
 
         GridPane root = new GridPane();
+        root.setHgap(20);
+        root.setVgap(20);
         root.setAlignment(Pos.CENTER);
         root.add(fxView,0,0);
         root.add(goldenView,1,0);

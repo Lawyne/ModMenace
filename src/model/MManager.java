@@ -4,6 +4,7 @@ import fx.FXView;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MManager {
     protected MSystem mSystem;
@@ -11,8 +12,8 @@ public class MManager {
     protected MSetSystem mLocations;
 
     protected LinkedList<FXView> observers;
-    protected HashMap<FXView,MSystem> fxViewMSystemHashMap;
-    protected HashMap<FXView,Integer> fxViewRange; //Range is defined as 0 for the golden model and any other integer for others. Views with the same Integer share knowledge.
+    protected ConcurrentHashMap<FXView,MSystem> fxViewMSystemHashMap;
+    protected ConcurrentHashMap<FXView,Integer> fxViewRange; //Range is defined as 0 for the golden model and any other integer for others. Views with the same Integer share knowledge.
 
 
     public MManager(MSystem system, MView... views){
@@ -24,8 +25,8 @@ public class MManager {
         this.mLocations = new MSetSystem(system);
 
         this.observers = new LinkedList<FXView>();
-        this.fxViewMSystemHashMap = new HashMap<>();
-        this.fxViewRange = new HashMap<>();
+        this.fxViewMSystemHashMap = new ConcurrentHashMap<>();
+        this.fxViewRange = new ConcurrentHashMap<>();
 
     }
 
@@ -116,7 +117,6 @@ public class MManager {
     }
 
     public void update(LinkedList<FXView> views){
-        //TODO
         for (FXView view: views) {
             view.update();
         }
