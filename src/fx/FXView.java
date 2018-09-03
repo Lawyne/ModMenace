@@ -1,8 +1,11 @@
 package fx;
 
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.util.Pair;
 import model.*;
 
@@ -19,6 +22,7 @@ public class FXView extends Pane {
     private MSetSystem locations;
     private MSystem system;
     private MManager controller;
+    private FXVertex selectedVertex;
 
     public FXView(MSystem system, MSetSystem locations){
         super();
@@ -32,6 +36,7 @@ public class FXView extends Pane {
 
         this.locations = locations;
         this.system = system;
+        this.selectedVertex = null;
 
         this.entityFXVertexHashMap = new ConcurrentHashMap<MEntity, FXVertex>();
         this.linkFXEdgeHashMap = new ConcurrentHashMap<MLink,FXEdge>();
@@ -45,6 +50,8 @@ public class FXView extends Pane {
             FXVertex fxVertex = new FXVertex(entity,locations.getCoordinates(entity),locations.getColor(entity));
             entityFXVertexHashMap.put(entity, fxVertex);
             this.vertices.getChildren().add(fxVertex);
+
+            makeClickable(fxVertex);
         }
 
         //Binding Edges Starts
@@ -81,8 +88,7 @@ public class FXView extends Pane {
     }
 
     //adds entity to the system
-    public void addVertex(MEntity entity){
-        controller.addEntity(entity,this);
+    public void addVertex(MEntity entity){controller.addEntity(entity,this);
     }
 
     //adds a random new vertex when no argument
@@ -163,7 +169,12 @@ public class FXView extends Pane {
     }
 
     public void removeVertex(){
-    removeVertex(randomEntity());
+        if (selectedVertex.equals(null)){
+            removeVertex(randomEntity());
+        } else {
+            MEntity mEntity = getKey(selectedVertex);
+            removeVertex(mEntity);
+        }
 }
 
     public void removeEdge(MLink link){
@@ -172,6 +183,16 @@ public class FXView extends Pane {
 
     public void removeEdge(){
         removeEdge(randomLink());
+    }
+
+    public void setColor(FXVertex vertex, Color color){
+        vertex.setColor(color);
+        locations.setColor(vertex.getEntity(),color);
+    }
+
+    public void setColor(MEntity ent, Color color){
+        entityFXVertexHashMap.get(ent).setColor(color);
+        locations.setColor(ent,color);
     }
 
     private MLink randomLink() {
@@ -274,5 +295,50 @@ public class FXView extends Pane {
     public void update(MObject stuff){
         if(stuff.isEntity()){addNewEntity(stuff);}
         if(stuff.isLink()){addNewLink(stuff);}
+    }
+
+    public void setSelectedVertex(FXVertex fxVertex){
+        this.selectedVertex=fxVertex;
+    }
+
+    private MEntity getKey(FXVertex fxVertex){
+        for(Map.Entry entry: entityFXVertexHashMap.entrySet()){
+            if(fxVertex.equals(entry.getValue())){
+                MEntity entity = (MEntity) entry.getKey();
+                return entity;
+            }
+        }
+        return null;
+    }
+
+    private MLink getKey(FXEdge fxEdge){
+        for(Map.Entry entry: linkFXEdgeHashMap.entrySet()){
+            if(fxEdge.equals(entry.getValue())){
+                MLink link = (MLink) entry.getKey();
+                return link;
+            }
+        }
+        return null;
+    }
+
+    public void makeClickable(FXVertex fxVertex){
+        fxVertex.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println("mouse click detected! "+event.getSource());
+                System.out.println("I am :"+fxVertex.getEntity());
+                setSelectedVertex(fxVertex);
+            }
+        });
+    }
+
+    public void makeClickable(MEntity mEntity){
+        makeClickable(entityFXVertexHashMap.get(mEntity));
+    }
+
+    public void makeAllClickable(){
+        for (FXVertex fxVertex : entityFXVertexHashMap.values()){
+            makeClickable(fxVertex);
+        }
     }
 }

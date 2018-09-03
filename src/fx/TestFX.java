@@ -204,8 +204,9 @@ public class TestFX extends Application{
         root.add(buttons,0,1);
         root.add(goldenButtons,1,1);
         root.add(buttons1,2,1);
+        root.setStyle("-fx-background-color: white; -fx-grid-lines-visible: true");
 
-        Scene scene = new Scene(root, 3*FXConstants.WIDTH + (4 * FXConstants.MARGIN), FXConstants.HEIGHT + (4 * FXConstants.MARGIN));
+        Scene scene = new Scene(root, 3*FXConstants.WIDTH + (6 * FXConstants.MARGIN), FXConstants.HEIGHT + (6 * FXConstants.MARGIN));
 
         primaryStage.setScene(scene);
         primaryStage.show();

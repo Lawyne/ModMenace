@@ -57,6 +57,8 @@ public class MSetSystem{
         return colorHashMap.get(ent);
     }
 
+    public void setColor(MEntity ent, Color color){colorHashMap.put(ent,color);}
+
     //add the entity ent to the system
     public void addEntity(MEntity ent) {
         system.addEntity(ent);

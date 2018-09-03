@@ -1,6 +1,7 @@
 package model;
 
 import fx.FXView;
+import javafx.scene.paint.Color;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -83,10 +84,13 @@ public class MManager {
         LinkedList<FXView> views2Change = sharedKnowledge(view);
         mLocations.addEntity(entity);
         for (FXView fxView: views2Change) {
-            fxViewMSystemHashMap.get(view).addEntity(entity);
+            fxViewMSystemHashMap.get(fxView).addEntity(entity);
         }
         //TODO
         update(views2Change);
+        for (FXView fxView: views2Change) {
+            fxView.makeClickable(entity);
+        }
     }
 
     //adds a link to the system
@@ -94,7 +98,7 @@ public class MManager {
         LinkedList<FXView> views2Change = sharedKnowledge(view);
         mLocations.addLink(link);
         for (FXView fxView: views2Change) {
-            fxViewMSystemHashMap.get(view).addLink(link);
+            fxViewMSystemHashMap.get(fxView).addLink(link);
         }
         //TODO
         update(views2Change);
@@ -103,16 +107,13 @@ public class MManager {
     public LinkedList<FXView> sharedKnowledge(FXView view) {
         LinkedList<FXView> result = new LinkedList<>();
         Integer range = fxViewRange.get(view);
-        if (range == 0){
-            result=observers;
-        }
-        else{
-            for (FXView fxView : observers) {
-                if (fxViewRange.get(fxView)== range || fxViewRange.get(fxView) == 0) {
-                    result.add(fxView);
-                }
+
+        for (FXView fxView : observers) {
+            if (fxViewRange.get(fxView)== range || fxViewRange.get(fxView) == 0) {
+                result.add(fxView);
             }
         }
+
         return result;
     }
 
@@ -144,5 +145,8 @@ public class MManager {
             fxViewMSystemHashMap.get(view).synchronize(mSystem);
         }
         update(views2Change);
+        for (FXView view: views2Change) {
+            fxView.makeAllClickable();
+        }
     }
 }
