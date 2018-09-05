@@ -5,12 +5,17 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.*;
+
+import static fx.FXConstants.*;
 
 public class TestFX extends Application{
 
@@ -18,6 +23,9 @@ public class TestFX extends Application{
     Button buttonGoldenEdge;
     Button buttonGoldenRemoveVertex;
     Button buttonGoldenRemoveEdge;
+    Button buttonClean;
+    Button buttonCorrupted;
+    Button buttonDisabled;
 
     Button buttonVertex;
     Button buttonEdge;
@@ -96,8 +104,11 @@ public class TestFX extends Application{
         FXView goldenView = new FXView(sys,controller.getLocations());
         controller.addObserver(goldenView);
 
+
+
         FXView fxView = new FXView(atkView,controller.getLocations());
         controller.addObserver(fxView,1,atkView);
+
         FXView fxView1 = new FXView(defView,controller.getLocations());
         controller.addObserver(fxView1,2,defView);
 
@@ -120,6 +131,15 @@ public class TestFX extends Application{
 
         buttonGoldenRemoveVertex = new Button("Remove vertex");
         buttonGoldenRemoveVertex.setOnAction(e ->goldenView.removeVertex());
+
+        buttonClean = new Button("Make clean");
+        buttonClean.setOnAction(e -> goldenView.setColor(COLOR_CLEAN));
+
+        buttonCorrupted = new Button("Make corrupted");
+        buttonCorrupted.setOnAction(e -> goldenView.setColor(COLOR_CORRUPTED));
+
+        buttonDisabled = new Button("Make disabled");
+        buttonDisabled.setOnAction(e -> goldenView.setColor(COLOR_DISABLED));
 
 
         buttonEdge = new Button("New edge");
@@ -180,12 +200,23 @@ public class TestFX extends Application{
         buttons.getChildren().add(buttonRemoveVertex);
         buttons.getChildren().add(buttonRemoveEdge);
         buttons.getChildren().add(buttonSync);
-        HBox goldenButtons = new HBox();
+
+        VBox goldenButtons = new VBox();
         goldenButtons.setAlignment(Pos.CENTER);
-        goldenButtons.getChildren().add(buttonGoldenVertex);
-        goldenButtons.getChildren().add(buttonGoldenEdge);
-        goldenButtons.getChildren().add(buttonGoldenRemoveVertex);
-        goldenButtons.getChildren().add(buttonGoldenRemoveEdge);
+        HBox goldenButtons1 = new HBox();
+        goldenButtons1.setAlignment(Pos.CENTER);
+        goldenButtons1.getChildren().add(buttonGoldenVertex);
+        goldenButtons1.getChildren().add(buttonGoldenEdge);
+        goldenButtons1.getChildren().add(buttonGoldenRemoveVertex);
+        goldenButtons1.getChildren().add(buttonGoldenRemoveEdge);
+        goldenButtons.getChildren().add(goldenButtons1);
+        HBox goldenButtons2 = new HBox();
+        goldenButtons2.setAlignment(Pos.CENTER);
+        goldenButtons2.getChildren().add(buttonClean);
+        goldenButtons2.getChildren().add(buttonCorrupted);
+        goldenButtons2.getChildren().add(buttonDisabled);
+        goldenButtons.getChildren().add(goldenButtons2);
+
         HBox buttons1 = new HBox();
         buttons1.setAlignment(Pos.CENTER);
         buttons1.getChildren().add(buttonVertex1);
@@ -195,8 +226,8 @@ public class TestFX extends Application{
         buttons1.getChildren().add(buttonSync1);
 
         GridPane root = new GridPane();
-        root.setHgap(20);
-        root.setVgap(20);
+        /*root.setHgap(20);
+        root.setVgap(20);*/
         root.setAlignment(Pos.CENTER);
         root.add(fxView,0,0);
         root.add(goldenView,1,0);

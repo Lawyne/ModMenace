@@ -1,6 +1,7 @@
 package model;
 
 import fx.FXView;
+import javafx.application.Platform;
 import javafx.scene.paint.Color;
 
 import java.util.HashMap;
@@ -136,7 +137,7 @@ public class MManager {
         for (FXView view: views2Change) {
             fxViewMSystemHashMap.get(view).remove(link);
         }
-        update(views2Change);
+        /*Platform.runLater(()->*/update(views2Change)/*)*/;
     }
 
     public void synchronize(FXView fxView) {

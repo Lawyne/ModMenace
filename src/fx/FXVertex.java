@@ -17,7 +17,6 @@ public class FXVertex extends Circle{
                 FXConstants.RADIUS,
                 Color.color(Math.random(),Math.random(),Math.random())  );
         this.entity = e;
-        //this.makeClickable();
     }
 
     public FXVertex(MEntity e, int x, int y){
@@ -26,7 +25,6 @@ public class FXVertex extends Circle{
                 FXConstants.RADIUS,
                 Color.color(Math.random(),Math.random(),Math.random())  );
         this.entity = e;
-        //this.makeClickable();
     }
 
     public FXVertex(MEntity e, int x, int y, Color color){
@@ -35,7 +33,6 @@ public class FXVertex extends Circle{
                 FXConstants.RADIUS,
                 color);
         this.entity = e;
-        //this.makeClickable();
     }
 
     public FXVertex(MEntity e, Color color){
@@ -44,7 +41,6 @@ public class FXVertex extends Circle{
                 FXConstants.RADIUS,
                 color);
         this.entity = e;
-        //this.makeClickable();
     }
 
     public FXVertex(MEntity e, Pair<Double,Double> coord){
@@ -53,7 +49,6 @@ public class FXVertex extends Circle{
                 FXConstants.RADIUS,
                 Color.color(Math.random(),Math.random(),Math.random())  );
         this.entity = e;
-        //this.makeClickable();
     }
 
     public FXVertex(MEntity e, Pair<Double,Double> coord,Color color){
@@ -62,19 +57,7 @@ public class FXVertex extends Circle{
                 FXConstants.RADIUS,
                 color  );
         this.entity = e;
-        //this.makeClickable();
     }
-
-    /*private void makeClickable(){
-        this.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                System.out.println("mouse click detected! "+event.getSource());
-                System.out.println("I am :"+entity);
-                setColor(Color.AQUA);
-            }
-        });
-    }*/
 
     public MEntity getEntity() {
         return entity;
@@ -92,4 +75,8 @@ public class FXVertex extends Circle{
         //TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
+    @Override
+    public String toString() {
+        return entity.toString();
+    }
 }

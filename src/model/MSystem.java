@@ -1,5 +1,8 @@
 package model;
 
+import javafx.application.Platform;
+
+import java.util.Iterator;
 import java.util.LinkedList;
 
 public class MSystem {
@@ -64,6 +67,18 @@ public class MSystem {
     //to be modified
     public void remove(MEntity e){
         entities.remove(e);
+        for (MLink l : e.getOuts()){
+            links.remove(l);
+        }
+        Iterator<MLink> iterator = links.iterator();
+        while (iterator.hasNext()){
+            MLink l= iterator.next();
+            System.out.println("Je passe ici");
+            if (l.getOut().equals(e)){
+                System.out.println("Je passe là");
+                iterator.remove();
+            }
+        }
     }
 
     //to be modified

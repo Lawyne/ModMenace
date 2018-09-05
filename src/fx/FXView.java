@@ -36,7 +36,6 @@ public class FXView extends Pane {
 
         this.locations = locations;
         this.system = system;
-        this.selectedVertex = null;
 
         this.entityFXVertexHashMap = new ConcurrentHashMap<MEntity, FXVertex>();
         this.linkFXEdgeHashMap = new ConcurrentHashMap<MLink,FXEdge>();
@@ -80,6 +79,8 @@ public class FXView extends Pane {
             FXEdge fxEdge = linkFXEdgeEntry.getValue();
             bindEnd(fxEdge);
         }
+
+        this.selectedVertex = null;
 
     }
 
@@ -195,6 +196,10 @@ public class FXView extends Pane {
         locations.setColor(ent,color);
     }
 
+    public void setColor(Color color){
+        setColor(selectedVertex,color);
+    }
+
     private MLink randomLink() {
         MLink[] keys = linkFXEdgeHashMap.keySet().toArray(new MLink[0]);
         MLink mLink = keys[new Random().nextInt(keys.length)];
@@ -289,6 +294,7 @@ public class FXView extends Pane {
         addNewEntities();
         removeLinks();
         addNewLinks();
+        updateColor();
     }
 
     //refreshes the system with an added given object
@@ -297,8 +303,22 @@ public class FXView extends Pane {
         if(stuff.isLink()){addNewLink(stuff);}
     }
 
+    public void updateColor(){
+        for (FXVertex fxVertex : entityFXVertexHashMap.values()){
+            updateColor(fxVertex);
+        }
+    }
+
+    public void updateColor(FXVertex fxVertex){
+        fxVertex.setColor(locations.getColor(getKey(fxVertex)));
+    }
+
     public void setSelectedVertex(FXVertex fxVertex){
         this.selectedVertex=fxVertex;
+    }
+
+    public FXVertex getSelectedVertex() {
+        return selectedVertex;
     }
 
     private MEntity getKey(FXVertex fxVertex){
@@ -326,7 +346,7 @@ public class FXView extends Pane {
             @Override
             public void handle(MouseEvent event) {
                 System.out.println("mouse click detected! "+event.getSource());
-                System.out.println("I am :"+fxVertex.getEntity());
+                System.out.println("I am : "+fxVertex.getEntity());
                 setSelectedVertex(fxVertex);
             }
         });
