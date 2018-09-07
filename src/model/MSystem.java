@@ -73,9 +73,7 @@ public class MSystem {
         Iterator<MLink> iterator = links.iterator();
         while (iterator.hasNext()){
             MLink l= iterator.next();
-            System.out.println("Je passe ici");
             if (l.getOut().equals(e)){
-                System.out.println("Je passe là");
                 iterator.remove();
             }
         }

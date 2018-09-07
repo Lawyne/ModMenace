@@ -286,6 +286,7 @@ public class FXView extends Pane {
     //synchronizes with goldenModel
     public void synchronize(){
         controller.synchronize(this);
+        updateColor();
     }
 
     //refreshes the system
@@ -294,7 +295,6 @@ public class FXView extends Pane {
         addNewEntities();
         removeLinks();
         addNewLinks();
-        updateColor();
     }
 
     //refreshes the system with an added given object
