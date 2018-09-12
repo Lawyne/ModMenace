@@ -2,8 +2,8 @@ package fx;
 
 import model.MEntity;
 import model.MLink;
-import model.MObject;
 import model.MSetSystem;
+import model.MObject;
 
 import java.util.LinkedList;
 

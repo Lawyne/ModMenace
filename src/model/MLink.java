@@ -14,6 +14,12 @@ public class MLink extends MObject{
         this.name=" ";
     }
 
+    public MLink(MEntity in,MEntity out){
+        this.out=out;
+        this.name=" ";
+        in.addLink(this);
+    }
+
     //sets target
     public void setOut(MEntity out) {
         this.out = out;

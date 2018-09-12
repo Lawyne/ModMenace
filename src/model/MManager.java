@@ -1,10 +1,7 @@
 package model;
 
 import fx.FXView;
-import javafx.application.Platform;
-import javafx.scene.paint.Color;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,7 +12,7 @@ public class MManager {
 
     protected LinkedList<FXView> observers;
     protected ConcurrentHashMap<FXView,MSystem> fxViewMSystemHashMap;
-    protected ConcurrentHashMap<FXView,Integer> fxViewRange; //Range is defined as 0 for the golden model and any other integer for others. Views with the same Integer share knowledge.
+    protected ConcurrentHashMap<FXView,Integer> fxViewRange; //Range is defined as 0 for the golden mmgraph.runtime.model and any other integer for others. Views with the same Integer share knowledge.
 
 
     public MManager(MSystem system, MView... views){

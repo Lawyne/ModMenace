@@ -5,6 +5,7 @@ import javafx.util.Pair;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Random;
 
 public class MSetSystem{
 
@@ -12,6 +13,73 @@ public class MSetSystem{
     protected HashMap<MEntity,Pair<Double,Double>> coordinates; //Hashmap of entities coordinates
     protected HashMap<MEntity,Color> colorHashMap;
     protected boolean dirty; //Observation boolean
+
+    //Default configuration
+    public MSetSystem(){
+        MEntity A = new MEntity("A");
+        MEntity B = new MEntity("B");
+        MEntity R = new MEntity("R");
+        MEntity I = new MEntity("I");
+        MLink AB = new MLink(B);
+        MLink AI = new MLink(I);
+        MLink AR = new MLink(R);
+        A.addLink(AB);
+        A.addLink(AI);
+        A.addLink(AR);
+
+        MLink BA = new MLink(A);
+        MLink BI = new MLink(I);
+        MLink BR = new MLink(R);
+        B.addLink(BA);
+        B.addLink(BI);
+        B.addLink(BR);
+
+        MLink IA = new MLink(A);
+        MLink IB = new MLink(B);
+        I.addLink(IA);
+        I.addLink(IB);
+
+        MLink RA = new MLink(A);
+        MLink RB = new MLink(B);
+        MLink RI = new MLink(I);
+        R.addLink(RA);
+        R.addLink(RB);
+        R.addLink(RI);
+
+        MSystem sys = new MSystem();
+        sys.addEntity(A);
+        sys.addEntity(B);
+        sys.addEntity(R);
+        sys.addEntity(I);
+        sys.addLink(AR);
+        sys.addLink(RA);
+        sys.addLink(AI);
+        sys.addLink(IA);
+        sys.addLink(BR);
+        sys.addLink(RB);
+        sys.addLink(BI);
+        sys.addLink(IB);
+        sys.addLink(RI);
+
+        this.system = sys;
+        this.coordinates = new HashMap<>();
+        this.colorHashMap = new HashMap<>();
+        this.dirty=true;
+
+        //coordinates & color assignment
+        for (MEntity ent: system.getEntities()) {
+            coordinates.put(ent, generateCoordinates());
+            colorHashMap.put(ent, generateColor());
+        }
+
+    }
+
+    public MSetSystem(MSystem mSystem, HashMap<MEntity,Pair<Double,Double>> coordinates, HashMap<MEntity,Color> colorHashMap, boolean dirty){
+        this.system = mSystem;
+        this.coordinates = coordinates;
+        this.colorHashMap = colorHashMap;
+        this.dirty=dirty;
+    }
 
     public MSetSystem(MSystem mSystem){
         this.system = mSystem;
@@ -24,6 +92,11 @@ public class MSetSystem{
             coordinates.put(ent,generateCoordinates());
             colorHashMap.put(ent,generateColor());
         }
+    }
+
+    public MSetSystem clone(){
+        MSetSystem clone = new MSetSystem(system.clone(),(HashMap)coordinates.clone(),(HashMap)colorHashMap.clone(),dirty);
+        return clone;
     }
 
     //check if dirty
@@ -73,6 +146,11 @@ public class MSetSystem{
         }
     }
 
+    public void addEntity(){
+        MEntity ent = new MEntity("Random entity");
+        addEntity(ent);
+    }
+
     //add the link link to the system
     public void addLink(MLink link) {
         system.addLink(link);
@@ -80,6 +158,13 @@ public class MSetSystem{
     }
 
     public void addLink(MLink... links){system.addLink(links);}
+
+    public void addLink(){
+        MEntity source = randomEntity();
+        MEntity target = randomEntity();
+        MLink link = new MLink(source,target);
+        addLink(link);
+    }
 
     //returns true if system contains e, false otherwise
     public boolean contains(MEntity e){
@@ -89,6 +174,12 @@ public class MSetSystem{
     //returns true if system contains l, false otherwise
     public boolean contains(MLink l){
         return system.contains(l);
+    }
+
+    private MEntity randomEntity() {
+        MEntity[] ents = system.getEntities().toArray(new MEntity[0]);
+        MEntity mEntity = ents[new Random().nextInt(ents.length)];
+        return mEntity;
     }
 
     //To be modified
@@ -112,5 +203,27 @@ public class MSetSystem{
     //return the link set of the system as a LinkedList
     public LinkedList<MLink> getLinks() {
         return system.getLinks();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash =0;
+        hash+=system.hashCode();
+        for (Color color:colorHashMap.values())
+               {
+            hash+=color.hashCode();
+        }
+        for (Pair<Double,Double> pair:coordinates.values()){
+            hash+=pair.hashCode();
+        }
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof MSetSystem)) return false;
+        MSetSystem other = (MSetSystem) obj;
+        if (!(other.hashCode()==this.hashCode())) return false;
+        return (this.system.hashCode()==other.system.hashCode() && this.dirty==other.isDirty() && this.colorHashMap==other.colorHashMap && this.coordinates==other.coordinates);
     }
 }

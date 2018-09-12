@@ -1,7 +1,5 @@
 package model;
 
-import javafx.application.Platform;
-
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -12,6 +10,13 @@ public class MSystem {
     public MSystem() {
         entities = new LinkedList<>();
         links = new LinkedList<>();
+    }
+
+    public MSystem clone(){
+        MSystem clone = new MSystem();
+        clone.addLinks(links);
+        clone.addEntities(entities);
+        return clone;
     }
 
     //adds entity ent to the system
@@ -110,4 +115,16 @@ public class MSystem {
         return str;
     }
 
+    @Override
+    public int hashCode() {
+        int hash =0;
+        for (MEntity ent: entities){
+            hash+=ent.getId();
+        }
+
+        for(MLink link: links){
+            hash+=link.hashCode();
+        }
+        return hash;
+    }
 }

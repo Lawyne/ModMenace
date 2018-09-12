@@ -1,7 +1,5 @@
 package fx;
 
-import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import javafx.util.Pair;
 import model.MEntity;
