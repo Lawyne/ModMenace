@@ -6,5 +6,7 @@ public abstract class MObject {
 
     public abstract String getName();
     public abstract void setName(String name);
+    public abstract boolean isEntity();
+    public abstract boolean isLink();
 
 }

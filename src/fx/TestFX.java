@@ -1,20 +1,38 @@
 package fx;
 
 import javafx.application.Application;
-import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import model.MEntity;
-import model.MLink;
-import model.MSystem;
+import model.*;
+
+import static fx.FXConstants.*;
 
 public class TestFX extends Application{
 
+    Button buttonGoldenVertex;
+    Button buttonGoldenEdge;
+    Button buttonGoldenRemoveVertex;
+    Button buttonGoldenRemoveEdge;
+    Button buttonClean;
+    Button buttonCorrupted;
+    Button buttonDisabled;
+
     Button buttonVertex;
     Button buttonEdge;
+    Button buttonRemoveVertex;
+    Button buttonRemoveEdge;
+    Button buttonSync;
+
+    Button buttonVertex1;
+    Button buttonEdge1;
+    Button buttonRemoveVertex1;
+    Button buttonRemoveEdge1;
+    Button buttonSync1;
 
     public static void main(String[] args) {
         launch(args);
@@ -72,28 +90,150 @@ public class TestFX extends Application{
         sys.addLink(IB);
         sys.addLink(RI);
 
-        FXSystem fxSystem = new FXSystem(sys);
+        MView atkView = new MView(sys);
+        MView defView = new MView(sys);
 
+        MManager controller = new MManager(sys,atkView,defView);
+        ///FXController controller = new FXController(setSystem);
+
+        FXView goldenView = new FXView(sys,controller.getLocations());
+        controller.addObserver(goldenView);
+
+
+
+        FXView fxView = new FXView(atkView,controller.getLocations());
+        controller.addObserver(fxView,1,atkView);
+
+        FXView fxView1 = new FXView(defView,controller.getLocations());
+        controller.addObserver(fxView1,2,defView);
+
+        /*
         for (int i = 0; i < 1000 ; i++) {
             fxSystem.addVertex();
             fxSystem.addEdge();
             fxSystem.addEdge();
         }
+        */
+
+        buttonGoldenEdge = new Button("New edge");
+        buttonGoldenEdge.setOnAction(e ->goldenView.addEdge());
+
+        buttonGoldenVertex = new Button("New vertex");
+        buttonGoldenVertex.setOnAction(e ->goldenView.addVertex());
+
+        buttonGoldenRemoveEdge = new Button("Remove edge");
+        buttonGoldenRemoveEdge.setOnAction(e ->goldenView.removeEdge());
+
+        buttonGoldenRemoveVertex = new Button("Remove vertex");
+        buttonGoldenRemoveVertex.setOnAction(e ->goldenView.removeVertex());
+
+        buttonClean = new Button("Make clean");
+        buttonClean.setOnAction(e -> goldenView.setColor(COLOR_CLEAN));
+
+        buttonCorrupted = new Button("Make corrupted");
+        buttonCorrupted.setOnAction(e -> goldenView.setColor(COLOR_CORRUPTED));
+
+        buttonDisabled = new Button("Make disabled");
+        buttonDisabled.setOnAction(e -> goldenView.setColor(COLOR_DISABLED));
+
 
         buttonEdge = new Button("New edge");
-        buttonEdge.setOnAction(e ->fxSystem.addEdge());
+        buttonEdge.setOnAction(e ->fxView.addEdge());
 
         buttonVertex = new Button("New vertex");
-        buttonVertex.setOnAction(e ->fxSystem.addVertex());
+        buttonVertex.setOnAction(e ->fxView.addVertex());
 
+        buttonRemoveEdge = new Button("Remove edge");
+        buttonRemoveEdge.setOnAction(e ->fxView.removeEdge());
+
+        buttonRemoveVertex = new Button("Remove vertex");
+        buttonRemoveVertex.setOnAction(e ->fxView.removeVertex());
+
+        buttonSync = new Button("Synchro");
+        buttonSync.setOnAction(e->fxView.synchronize());
+
+
+        buttonEdge1 = new Button("New edge");
+        buttonEdge1.setOnAction(e ->fxView1.addEdge());
+
+        buttonVertex1 = new Button("New vertex");
+        buttonVertex1.setOnAction(e ->fxView1.addVertex());
+
+        buttonRemoveEdge1 = new Button("Remove edge");
+        buttonRemoveEdge1.setOnAction(e ->fxView1.removeEdge());
+
+        buttonRemoveVertex1 = new Button("Remove vertex");
+        buttonRemoveVertex1.setOnAction(e ->fxView1.removeVertex());
+
+        buttonSync1 = new Button("Synchro");
+        buttonSync1.setOnAction(e->fxView1.synchronize());
+
+        /*
         HBox buttons = new HBox();
         buttons.getChildren().add(buttonVertex);
         buttons.getChildren().add(buttonEdge);
+        buttons.getChildren().add(new Text("         "));
+        buttons.getChildren().add(buttonGoldenVertex);
+        buttons.getChildren().add(buttonGoldenEdge);
+        buttons.getChildren().add(new Text("         "));
+        buttons.getChildren().add(buttonVertex1);
+        buttons.getChildren().add(buttonEdge1);
 
-        BorderPane root = new BorderPane(fxSystem, null, null, buttons, null);
-        root.setMargin(fxSystem,new Insets(FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN));
+        BorderPane root = new BorderPane(goldenView, null, fxView, buttons, fxView1);
+        root.setMargin(fxView,new Insets(FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN));
+        root.setMargin(goldenView,new Insets(FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN));
+        root.setMargin(fxView1,new Insets(FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN,FXConstants.MARGIN));
 
-        Scene scene = new Scene(root, FXConstants.WIDTH + (2 * FXConstants.MARGIN), FXConstants.HEIGHT + (2 * FXConstants.MARGIN));
+        Scene scene = new Scene(root, 3*FXConstants.WIDTH + (4 * FXConstants.MARGIN), FXConstants.HEIGHT + (4 * FXConstants.MARGIN));
+        */
+
+
+        HBox buttons = new HBox();
+        buttons.setAlignment(Pos.CENTER);
+        buttons.getChildren().add(buttonVertex);
+        buttons.getChildren().add(buttonEdge);
+        buttons.getChildren().add(buttonRemoveVertex);
+        buttons.getChildren().add(buttonRemoveEdge);
+        buttons.getChildren().add(buttonSync);
+
+        VBox goldenButtons = new VBox();
+        goldenButtons.setAlignment(Pos.CENTER);
+        HBox goldenButtons1 = new HBox();
+        goldenButtons1.setAlignment(Pos.CENTER);
+        goldenButtons1.getChildren().add(buttonGoldenVertex);
+        goldenButtons1.getChildren().add(buttonGoldenEdge);
+        goldenButtons1.getChildren().add(buttonGoldenRemoveVertex);
+        goldenButtons1.getChildren().add(buttonGoldenRemoveEdge);
+        goldenButtons.getChildren().add(goldenButtons1);
+        HBox goldenButtons2 = new HBox();
+        goldenButtons2.setAlignment(Pos.CENTER);
+        goldenButtons2.getChildren().add(buttonClean);
+        goldenButtons2.getChildren().add(buttonCorrupted);
+        goldenButtons2.getChildren().add(buttonDisabled);
+        goldenButtons.getChildren().add(goldenButtons2);
+
+        HBox buttons1 = new HBox();
+        buttons1.setAlignment(Pos.CENTER);
+        buttons1.getChildren().add(buttonVertex1);
+        buttons1.getChildren().add(buttonEdge1);
+        buttons1.getChildren().add(buttonRemoveVertex1);
+        buttons1.getChildren().add(buttonRemoveEdge1);
+        buttons1.getChildren().add(buttonSync1);
+
+        GridPane root = new GridPane();
+        /*root.setHgap(20);
+        root.setVgap(20);*/
+        root.setAlignment(Pos.CENTER);
+        root.add(fxView,0,0);
+        root.add(goldenView,1,0);
+        root.add(fxView1,2,0);
+        root.add(buttons,0,1);
+        root.add(goldenButtons,1,1);
+        root.add(buttons1,2,1);
+        root.setStyle("-fx-background-color: white; -fx-grid-lines-visible: true");
+
+        Scene scene = new Scene(root, 3*FXConstants.WIDTH + (6 * FXConstants.MARGIN), FXConstants.HEIGHT + (6 * FXConstants.MARGIN));
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }

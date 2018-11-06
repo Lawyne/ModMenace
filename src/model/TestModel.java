@@ -65,7 +65,14 @@ public class TestModel {
 
         sys.remove(AB);
 
+        System.out.println(sys);
+
         System.out.println(sys.contains(AB));
+        System.out.println(sys.contains(B));
+
+        sys.remove(A);
+
+        System.out.println(sys);
     }
 
 }
