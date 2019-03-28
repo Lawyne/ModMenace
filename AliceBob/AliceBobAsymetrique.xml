@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+
+const int N = 3;
+const int id_intrus = N-1;
+typedef int[0,id_intrus] id_a;
+typedef int[0,id_intrus-1] id_victime;
+
+// type def
+const int PROB = 0;
+const int ANSWER = 1;
+const int COMM = 2;
+    //specific types for ATKing
+const int ROOT = 3;
+const int GET_TABLE = 4;
+const int EDIT_TABLE = 5;
+
+// gen def
+const int NOGEN = 0;
+const int GEN = 1;
+
+//public_comp def
+const int NOCOMP = 0;
+
+//key def
+const int NOKEY = 0;
+
+//content def
+const int NOCONTENT = 0;
+const int CONTENT = 1;
+
+//access def
+const int NONE = 0;
+const int USER = 1;
+const int ADMIN = 2;
+
+typedef struct {
+    int sender;
+    int receiver;
+    int type;
+    int gen;
+    int comp;
+    int key;
+    int content;
+    int access;
+} message;
+
+message M[N];
+id_a address_table[N];
+
+chan in[N], out[N];</declaration>
+	<template>
+		<name x="5" y="5">Acteur_Envoi</name>
+		<parameter>const id_a id</parameter>
+		<declaration>//1 for Alice, 2 for Bob
+const int PRIVATE_KEY = id + 1;
+int shared_key;
+int findCorrespondent(){    if (id == 0)    {return 1;}    else    {return 0;}}
+const int CORRESPONDENT = findCorrespondent();
+
+
+
+void createMessage(int a, int b, int c, int d, int e)
+{
+    M[id].sender = id;
+    M[id].receiver = CORRESPONDENT;
+    M[id].type = a;
+    M[id].gen = b;
+    M[id].comp = c;
+    M[id].key = d;
+    M[id].content = e;
+    M[id].access = USER;
+}
+
+int forgePublicComp(int comp){return (comp + PRIVATE_KEY);}
+
+void forgeKey(int comp){shared_key= PRIVATE_KEY + comp;}
+
+void prob(){createMessage(PROB,GEN,forgePublicComp(GEN),NOKEY,NOCONTENT);}
+
+void answerProb(){createMessage(ANSWER,GEN,forgePublicComp(GEN),NOKEY,NOCONTENT);}
+
+void sendMessage(){createMessage(COMM,NOGEN,NOCOMP,shared_key,CONTENT);}
+
+void receive()
+{
+    if (M[id].type == PROB &amp;&amp; M[id].gen == GEN){
+        forgeKey(M[id].comp);
+        }
+    else
+        if (M[id].type == ANSWER &amp;&amp; M[id].gen == GEN)
+            {
+                forgeKey(M[id].comp);
+            }
+}
+</declaration>
+		<location id="id0" x="221" y="0">
+			<committed/>
+		</location>
+		<location id="id1" x="459" y="-8">
+			<committed/>
+		</location>
+		<location id="id2" x="306" y="0">
+			<name x="296" y="-34">SENDING_CHANNEL</name>
+		</location>
+		<location id="id3" x="144" y="0">
+			<name x="134" y="-34">RECEIVED_PROB</name>
+		</location>
+		<location id="id4" x="0" y="0">
+			<name x="-10" y="-34">INIT</name>
+		</location>
+		<init ref="id4"/>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="239" y="-17">in[id]!</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="365" y="-102">in[id]!</label>
+			<nail x="382" y="-68"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id1"/>
+			<label kind="assignment" x="324" y="29">sendMessage()</label>
+			<nail x="382" y="59"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id0"/>
+			<label kind="assignment" x="162" y="0">answerProb()</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="guard" x="18" y="-34">M[id].type == PROB</label>
+			<label kind="synchronisation" x="18" y="-17">out[id]?</label>
+			<label kind="assignment" x="18" y="0">receive()</label>
+		</transition>
+	</template>
+	<template>
+		<name>Acteur_Reception</name>
+		<parameter>const id_a id</parameter>
+		<declaration>//1 for Alice, 2 for Bob
+const int PRIVATE_KEY = id + 1;
+int shared_key;
+int findCorrespondent(){    if (id == 0)    {return 1;}    else    {return 0;}}
+const int CORRESPONDENT = findCorrespondent();
+
+
+
+
+void createMessage(int a, int b, int c, int d, int e)
+{
+    M[id].sender = id;
+    M[id].receiver = CORRESPONDENT;
+    M[id].type = a;
+    M[id].gen = b;
+    M[id].comp = c;
+    M[id].key = d;
+    M[id].content = e;
+    M[id].access = USER;
+}
+
+int forgePublicComp(int comp){return (comp + PRIVATE_KEY);}
+
+void forgeKey(int comp){shared_key= PRIVATE_KEY + comp;}
+
+void prob(){createMessage(PROB,GEN,forgePublicComp(GEN),NOKEY,NOCONTENT);}
+
+void answerProb(){createMessage(ANSWER,GEN,forgePublicComp(GEN),NOKEY,NOCONTENT);}
+
+void sendMessage(){createMessage(COMM,NOGEN,NOCOMP,shared_key,CONTENT);}
+
+void receive()
+{
+    if (M[id].type == PROB &amp;&amp; M[id].gen == GEN){
+        forgeKey(M[id].comp);
+        }
+    else
+        if (M[id].type == ANSWER &amp;&amp; M[id].gen == GEN)
+            {
+                forgeKey(M[id].comp);
+            }
+}
+</declaration>
+		<location id="id5" x="-255" y="-102">
+			<committed/>
+		</location>
+		<location id="id6" x="144" y="-110">
+			<committed/>
+		</location>
+		<location id="id7" x="-9" y="-102">
+			<name x="-19" y="-136">RECEIVING_CHANNEL</name>
+		</location>
+		<location id="id8" x="-171" y="-102">
+			<name x="-181" y="-136">INITIATED_PROB</name>
+		</location>
+		<location id="id9" x="-331" y="-102">
+			<name x="-341" y="-136">INIT</name>
+		</location>
+		<init ref="id9"/>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id8"/>
+			<label kind="synchronisation" x="-237" y="-119">in[id]!</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id7"/>
+			<nail x="67" y="-170"/>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id6"/>
+			<label kind="guard" x="8" y="-76">M[id].type == COMM &amp;&amp; M[id].key == shared_key</label>
+			<label kind="synchronisation" x="8" y="-59">out[id]?</label>
+			<label kind="assignment" x="8" y="-42">receive()</label>
+			<nail x="67" y="-43"/>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id7"/>
+			<label kind="guard" x="-153" y="-136">M[id].type == ANSWER</label>
+			<label kind="synchronisation" x="-153" y="-119">out[id]?</label>
+			<label kind="assignment" x="-153" y="-102">receive()</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id5"/>
+			<label kind="assignment" x="-313" y="-102">prob()</label>
+		</transition>
+	</template>
+	<template>
+		<name>Reseau</name>
+		<declaration>id_a id2address[N];
+
+message msg;
+id_a target;
+
+void initialize()
+{
+    for (id : id_a)
+    {
+        id2address[id] = id;
+    }
+}
+
+void fillMessage(message M){msg = M;}
+void findTarget(id_a id){target = id2address[id];}
+
+void processMessage(message M){fillMessage(M); findTarget(M.receiver);}
+
+void sendMessage()
+{
+    M[target] = msg;
+}</declaration>
+		<location id="id10" x="-102" y="-119">
+			<name x="-112" y="-153">SEND</name>
+			<committed/>
+		</location>
+		<location id="id11" x="-238" y="-119">
+			<committed/>
+		</location>
+		<location id="id12" x="-238" y="8">
+			<name x="-248" y="-26">READY</name>
+		</location>
+		<location id="id13" x="-25" y="8">
+			<name x="-35" y="-26">INIT</name>
+			<committed/>
+		</location>
+		<init ref="id13"/>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id11"/>
+			<label kind="assignment" x="-220" y="-119">sendMessage()</label>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="-331" y="-68">out[target]!</label>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id10"/>
+			<label kind="select" x="-102" y="-110">e : id_a</label>
+			<label kind="guard" x="-102" y="-93">(M[e].type == PROB || M[e].type == ANSWER || M[e].type == COMM) &amp;&amp; M[e].access==USER</label>
+			<label kind="synchronisation" x="-102" y="-76">in[e]?</label>
+			<label kind="assignment" x="-102" y="-59">processMessage(M[e])</label>
+			<nail x="-127" y="-25"/>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id12"/>
+			<label kind="assignment" x="-161" y="8">initialize()</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+AliceE = Acteur_Envoi(0);
+AliceR = Acteur_Reception(0);
+
+BobE = Acteur_Envoi(1);
+BobR = Acteur_Reception(1);
+// List one or more processes to be composed into a system.
+system AliceE,AliceR,BobE,BobR,Reseau;
+    </system>
+	<queries>
+	</queries>
+</nta>
