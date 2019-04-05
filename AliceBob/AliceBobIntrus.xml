@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+
+const int N = 3;
+const int id_intrus = N-1;
+typedef int[0,id_intrus] id_a;
+typedef int[0,id_intrus-1] id_victime;
+
+// type def
+const int PROB = 0;
+const int ANSWER = 1;
+const int COMM = 2;
+const int ATK = 3;
+
+
+// gen def
+const int NOGEN = 0;
+const int GEN = 1;
+
+//public_comp def
+const int NOCOMP = 0;
+
+//key def
+const int NOKEY = 0;
+
+//content def
+const int NOCONTENT = 0;
+const int CONTENT = 1;
+
+typedef struct {
+    int sender;
+    int receiver;
+    int type;
+    int gen;
+    int comp;
+    int key;
+    int content;
+} message;
+message M = {0,0,0,0,0,0,0};
+
+chan in[N], out[N];</declaration>
+	<template>
+		<name>Intrus</name>
+		<parameter>const id_a id</parameter>
+		<declaration>const int PRIVATE_KEY = id + 1;
+int shared_key[id];
+int target_acquired[id];
+//advancement in attacking id_target: 0 None / 1 Attacked / 2 Work in progress / 3 Prob received
+
+
+void createMessage(int a, int b, int c, int d, int e, int f, int g)
+{
+    M.sender = a;
+    M.receiver = b;
+    M.type = c;
+    M.gen = d;
+    M.comp = e;
+    M.key = f;
+    M.content = g;
+}
+
+int forgePublicComp(int comp){return (comp + PRIVATE_KEY);}
+
+void forgeKey(int target,int comp){shared_key[target]= PRIVATE_KEY + comp;}
+
+void atk(){createMessage(id,id,ATK,NOGEN,NOCOMP,NOKEY,NOCONTENT);}
+
+void prob(int target)
+{
+    createMessage(id,target,PROB,GEN,forgePublicComp(GEN),NOKEY,NOCONTENT);
+    target_acquired[target]=2;
+}
+
+void answerProb(int target)
+{
+    createMessage(id,target,ANSWER,GEN,forgePublicComp(GEN),NOKEY,NOCONTENT);
+    target_acquired[target]=1;
+}
+
+void sendMessage(int target){createMessage(id,target,COMM,NOGEN,NOCOMP,shared_key[target],CONTENT);}
+
+void receive()
+{
+    if (M.type == PROB &amp;&amp; M.gen == GEN){
+        forgeKey(M.sender,M.comp);
+        target_acquired[M.sender]=3;
+        }
+    else
+        if (M.type == ANSWER &amp;&amp; M.gen == GEN)
+            {
+                forgeKey(M.sender,M.comp);
+                target_acquired[M.sender]=1;
+            }
+}
+
+void receiveAdmin()
+{
+    
+}</declaration>
+		<location id="id0" x="-263" y="-221">
+			<name x="-331" y="-255">ANSWERING_PROB</name>
+			<committed/>
+		</location>
+		<location id="id1" x="-229" y="59">
+			<name x="-305" y="68">SENDING_MESSAGE</name>
+			<committed/>
+		</location>
+		<location id="id2" x="-68" y="59">
+			<name x="-85" y="68">PROBING_TARGET</name>
+			<committed/>
+		</location>
+		<location id="id3" x="42" y="-229">
+			<name x="17" y="-263">RECEIVE</name>
+			<committed/>
+		</location>
+		<location id="id4" x="0" y="-85">
+			<name x="-10" y="-119">ATTACKING</name>
+			<committed/>
+		</location>
+		<location id="id5" x="-119" y="-85">
+			<name x="-129" y="-119">ATTACKED</name>
+		</location>
+		<location id="id6" x="119" y="-85">
+			<name x="109" y="-119">INIT</name>
+		</location>
+		<init ref="id6"/>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id0"/>
+			<label kind="select" x="-382" y="-144">id_v : id_victime</label>
+			<label kind="guard" x="-382" y="-127">target_acquired[id_v]==3</label>
+			<label kind="assignment" x="-382" y="-110">answerProb(id_v)</label>
+			<nail x="-263" y="-85"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="-238" y="-204">in[id]!</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="-212" y="0">in[id]!</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id1"/>
+			<label kind="select" x="-348" y="-43">id_v : id_victime</label>
+			<label kind="guard" x="-348" y="-25">target_acquired[id_v]==1</label>
+			<label kind="assignment" x="-348" y="-9">sendMessage(id_v)</label>
+			<nail x="-297" y="-9"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="-119" y="-8">in[id]!</label>
+			<nail x="-119" y="59"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id2"/>
+			<label kind="select" x="-51" y="-25">id_v : id_victime</label>
+			<label kind="guard" x="-51" y="-8">target_acquired[id_v]==0</label>
+			<label kind="assignment" x="-51" y="9">prob(id_v)</label>
+			<nail x="0" y="59"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id5"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="-118" y="-221">out[id]?</label>
+			<label kind="assignment" x="-119" y="-204">receive()</label>
+			<nail x="-119" y="-229"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="-76" y="-110">in[id]!</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id4"/>
+			<label kind="assignment" x="51" y="-102">atk()</label>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">Acteur</name>
+		<parameter>const id_a id</parameter>
+		<declaration>// Place local declarations here.
+
+//1 for Alice, 2 for Bob
+const int PRIVATE_KEY = id + 1;
+int shared_key;
+
+int findCorrespondent(){
+    if (id == 0)    {return 1;}    else    {return 0;}
+}
+
+const int CORRESPONDENT = findCorrespondent();
+
+
+
+
+void createMessage(int a, int b, int c, int d, int e)
+{
+    M.sender = id;
+    M.receiver = CORRESPONDENT;
+    M.type = a;
+    M.gen = b;
+    M.comp = c;
+    M.key = d;
+    M.content = e;
+}
+
+int forgePublicComp(int comp){return (comp + PRIVATE_KEY);}
+
+void forgeKey(int comp){shared_key= PRIVATE_KEY + comp;}
+
+void prob(){createMessage(PROB,GEN,forgePublicComp(GEN),NOKEY,NOCONTENT);}
+
+void answerProb(){createMessage(ANSWER,GEN,forgePublicComp(GEN),NOKEY,NOCONTENT);}
+
+void sendMessage(){createMessage(COMM,NOGEN,NOCOMP,shared_key,CONTENT);}
+
+void receive()
+{
+    if (M.type == PROB &amp;&amp; M.gen == GEN){
+        forgeKey(M.comp);
+        }
+    else
+        if (M.type == ANSWER &amp;&amp; M.gen == GEN)
+            {
+                forgeKey(M.comp);
+            }
+}
+
+
+
+</declaration>
+		<location id="id7" x="238" y="-450">
+			<name x="196" y="-442">SENDING_MESSAGE</name>
+			<committed/>
+		</location>
+		<location id="id8" x="51" y="-297">
+			<name x="51" y="-288">ANSWERING_PROB</name>
+			<committed/>
+		</location>
+		<location id="id9" x="-467" y="-620">
+			<name x="-484" y="-654">UNWANTED</name>
+		</location>
+		<location id="id10" x="51" y="-450">
+			<name x="-26" y="-484">COMM_CHANNEL</name>
+		</location>
+		<location id="id11" x="-102" y="-297">
+			<name x="-144" y="-331">RECEIVED_PROB</name>
+		</location>
+		<location id="id12" x="-255" y="-442">
+			<name x="-263" y="-476">INITIATED_PROB</name>
+		</location>
+		<location id="id13" x="-255" y="-297">
+			<name x="-265" y="-331">INIT</name>
+		</location>
+		<init ref="id13"/>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id8"/>
+			<label kind="assignment" x="-68" y="-289">answerProb()</label>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id7"/>
+			<label kind="assignment" x="102" y="-476">sendMessage()</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id9"/>
+			<label kind="guard" x="-459" y="-450">M.type != PROB</label>
+			<label kind="synchronisation" x="-459" y="-433">out[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id9"/>
+			<label kind="guard" x="-374" y="-527">M.type != ANSWER</label>
+			<label kind="synchronisation" x="-374" y="-510">out[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id9"/>
+			<label kind="guard" x="-297" y="-595">M.type != COMM || M.key != shared_key</label>
+			<label kind="synchronisation" x="-297" y="-578">out[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id10"/>
+			<label kind="synchronisation" x="153" y="-416">in[id]!</label>
+			<nail x="238" y="-391"/>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id10"/>
+			<label kind="guard" x="-8" y="-637">M.type == COMM &amp;&amp; M.key == shared_key</label>
+			<label kind="synchronisation" x="-8" y="-620">out[id]?</label>
+			<label kind="assignment" x="-8" y="-603">receive()</label>
+			<nail x="51" y="-595"/>
+			<nail x="170" y="-595"/>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id10"/>
+			<label kind="guard" x="-161" y="-459">M.type == ANSWER</label>
+			<label kind="synchronisation" x="-161" y="-442">out[id]?</label>
+			<label kind="assignment" x="-161" y="-425">receive()</label>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id10"/>
+			<label kind="synchronisation" x="59" y="-382">in[id]!</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id11"/>
+			<label kind="guard" x="-229" y="-289">M.type == PROB</label>
+			<label kind="synchronisation" x="-229" y="-272">out[id]?</label>
+			<label kind="assignment" x="-229" y="-255">receive()</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="-272" y="-391">in[id]!</label>
+			<label kind="assignment" x="-272" y="-374">prob()</label>
+		</transition>
+	</template>
+	<template>
+		<name>Reseau</name>
+		<location id="id14" x="-102" y="178">
+			<name x="-127" y="144">REDIRECT</name>
+			<committed/>
+		</location>
+		<location id="id15" x="85" y="178">
+			<name x="34" y="144">CORRUPTED_SEND</name>
+			<committed/>
+		</location>
+		<location id="id16" x="-8" y="85">
+			<name x="-18" y="51">CORRUPTED</name>
+		</location>
+		<location id="id17" x="-8" y="-144">
+			<name x="-18" y="-178">SEND</name>
+			<committed/>
+		</location>
+		<location id="id18" x="-8" y="-17">
+			<name x="-18" y="-51">SAFE</name>
+		</location>
+		<init ref="id18"/>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id16"/>
+			<label kind="synchronisation" x="-136" y="195">out[id_intrus]!</label>
+			<nail x="-8" y="178"/>
+		</transition>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id14"/>
+			<label kind="select" x="-195" y="85">e : id_a</label>
+			<label kind="guard" x="-195" y="102">e != id_intrus</label>
+			<label kind="synchronisation" x="-195" y="119">in[e]?</label>
+			<nail x="-102" y="85"/>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id16"/>
+			<label kind="synchronisation" x="0" y="195">out[M.receiver]!</label>
+			<nail x="-8" y="178"/>
+		</transition>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id15"/>
+			<label kind="select" x="102" y="85">e : id_a</label>
+			<label kind="guard" x="102" y="102">e == id_intrus</label>
+			<label kind="synchronisation" x="102" y="119">in[e]?</label>
+			<nail x="85" y="85"/>
+		</transition>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id16"/>
+			<label kind="guard" x="-8" y="0">M.type == ATK</label>
+			<label kind="synchronisation" x="-8" y="17">in[id_intrus]?</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id18"/>
+			<label kind="synchronisation" x="10" y="-161">out[M.receiver]!</label>
+			<nail x="85" y="-144"/>
+			<nail x="85" y="-17"/>
+		</transition>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id17"/>
+			<label kind="select" x="-8" y="-110">e : id_a</label>
+			<label kind="guard" x="-8" y="-93">M.type != ATK</label>
+			<label kind="synchronisation" x="-8" y="-80">in[e]?</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+Alice = Acteur(0);
+Bob = Acteur(1);
+Attaquant = Intrus(id_intrus);
+
+// List one or more processes to be composed into a system.
+system Alice,Bob,Reseau,Attaquant;
+    </system>
+	<queries>
+		<query>
+			<formula>A[] not Alice.UNWANTED
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>A[] not deadlock
+			</formula>
+			<comment>
+			</comment>
+		</query>
+	</queries>
+</nta>

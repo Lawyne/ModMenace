@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+
+const int N = 2;
+typedef int[0,N-1] id_a;
+
+// type def
+const int PROB = 0;
+const int ANSWER = 1;
+const int COMM = 2;
+
+
+// gen def
+const int NOGEN = 0;
+const int GEN = 1;
+
+//public_comp def
+const int NOCOMP = 0;
+
+//key def
+const int NOKEY = 0;
+
+//content def
+const int NOCONTENT = 0;
+const int CONTENT = 1;
+
+typedef struct {
+    int type;
+    int gen;
+    int comp;
+    int key;
+    int content;
+} message;
+message M = {0,0,0,0,0};
+
+chan synchro;</declaration>
+	<template>
+		<name x="5" y="5">Acteur</name>
+		<parameter>const id_a id</parameter>
+		<declaration>// Place local declarations here.
+//1 for Alice, 2 for Bob
+const int PRIVATE_KEY = id + 1;
+int shared_key;
+
+void createMessage(int a, int b, int c, int d, int e)
+{
+    M.type = a;
+    M.gen = b;
+    M.comp = c;
+    M.key = d;
+    M.content = e;
+}
+
+int forgePublicComp(int comp){return (comp + PRIVATE_KEY);}
+
+void forgeKey(int comp){shared_key= PRIVATE_KEY + comp;}
+
+void prob(){createMessage(PROB,GEN,forgePublicComp(GEN),NOKEY,NOCONTENT);}
+
+void answerProb(){createMessage(ANSWER,GEN,forgePublicComp(GEN),NOKEY,NOCONTENT);}
+
+void sendMessage(){createMessage(COMM,NOGEN,NOCOMP,shared_key,CONTENT);}
+
+void receive()
+{
+    if (M.type == PROB &amp;&amp; M.gen == GEN){
+        forgeKey(M.comp);
+        }
+    else
+        if (M.type == ANSWER &amp;&amp; M.gen == GEN)
+            {
+                forgeKey(M.comp);
+            }
+}
+
+
+
+</declaration>
+		<location id="id0" x="518" y="-229">
+			<name x="476" y="-221">SENDING_MESSAGE</name>
+			<committed/>
+		</location>
+		<location id="id1" x="246" y="-68">
+			<name x="246" y="-59">ANSWERING_PROB</name>
+			<committed/>
+		</location>
+		<location id="id2" x="25" y="-204">
+			<name x="8" y="-238">UNWANTED</name>
+		</location>
+		<location id="id3" x="408" y="-374">
+			<name x="331" y="-408">COMM_CHANNEL</name>
+		</location>
+		<location id="id4" x="59" y="-17">
+			<name x="25" y="0">RECEIVED_PROB</name>
+		</location>
+		<location id="id5" x="-255" y="-442">
+			<name x="-263" y="-476">INITIATED_PROB</name>
+		</location>
+		<location id="id6" x="-289" y="-68">
+			<name x="-299" y="-102">INIT</name>
+		</location>
+		<init ref="id6"/>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id1"/>
+			<label kind="assignment" x="77" y="-42">answerProb()</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id0"/>
+			<label kind="assignment" x="426" y="-301">sendMessage()</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-221" y="-136">M.type != PROB</label>
+			<label kind="synchronisation" x="-221" y="-119">synchro?</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-204" y="-348">M.type != ANSWER</label>
+			<label kind="synchronisation" x="-204" y="-331">synchro?</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id2"/>
+			<label kind="guard" x="68" y="-297">M.type != COMM || M.key != shared_key</label>
+			<label kind="synchronisation" x="68" y="-280">synchro?</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="646" y="-357">synchro!</label>
+			<nail x="688" y="-238"/>
+			<nail x="654" y="-433"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id3"/>
+			<label kind="guard" x="399" y="-578">M.type == COMM &amp;&amp; M.key == shared_key</label>
+			<label kind="synchronisation" x="399" y="-561">synchro?</label>
+			<label kind="assignment" x="399" y="-544">receive()</label>
+			<nail x="263" y="-578"/>
+			<nail x="629" y="-518"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-8" y="-476">M.type == ANSWER</label>
+			<label kind="synchronisation" x="-8" y="-459">synchro?</label>
+			<label kind="assignment" x="-8" y="-442">receive()</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="272" y="-195">synchro!</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-153" y="-68">M.type == PROB</label>
+			<label kind="synchronisation" x="-153" y="-51">synchro?</label>
+			<label kind="assignment" x="-153" y="-34">receive()</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id5"/>
+			<label kind="synchronisation" x="-323" y="-306">synchro!</label>
+			<label kind="assignment" x="-323" y="-289">prob()</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+Alice = Acteur(0);
+Bob = Acteur(1);
+// List one or more processes to be composed into a system.
+system Alice,Bob;
+    </system>
+	<queries>
+	</queries>
+</nta>

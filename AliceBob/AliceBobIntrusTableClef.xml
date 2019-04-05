@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>const int N = 3;
+const int id_intrus = N-1;
+typedef int[0,id_intrus] id_a;
+typedef int[0,id_intrus-1] id_victime;
+
+// type def
+const int PROB = 0;
+const int ANSWER = 1;
+const int COMM = 2;
+    //specific types for ATKing
+const int ROOT = 3;
+const int GET_TABLE = 4;
+const int EDIT_TABLE = 5;
+
+// gen def
+const int NOGEN = 0;
+const int GEN = 1;
+
+//public_comp def
+const int NOCOMP = 0;
+
+//key def
+const int NOKEY = 0;
+
+//content def
+const int NOCONTENT = 0;
+const int CONTENT = 1;
+
+//access def
+const int NONE = 0;
+const int USER = 1;
+const int ADMIN = 2;
+
+typedef struct {
+    int sender;
+    int receiver;
+    int type;
+    int gen;
+    int comp;
+    int key;
+    int content;
+    int access;
+} message;
+
+message M = {0,0,0,0,0,0,0,0};
+id_a address_table[N];
+
+chan in[N], out[N];</declaration>
+	<template>
+		<name>Intrus</name>
+		<parameter>const id_a id</parameter>
+		<declaration>const int PRIVATE_KEY = id + 1;
+int shared_key[id];
+int target_acquired[id];
+//advancement in attacking id_target: 0 None / 1 Attacked / 2 Work in progress / 3 Prob received
+int target_address[N];
+int current_access;
+
+void createMessage(int a, int b, int c, int d, int e, int f, int g)
+{
+    M.sender = a;
+    M.receiver = b;
+    M.type = c;
+    M.gen = d;
+    M.comp = e;
+    M.key = f;
+    M.content = g;
+    M.access = current_access;
+}
+
+int forgePublicComp(int gen){return (gen + PRIVATE_KEY);}
+
+void forgeKey(int target,int comp){shared_key[target]= PRIVATE_KEY + comp;}
+
+void root()
+{
+    createMessage(id,id,ROOT,NOGEN,NOCOMP,NOKEY,NOCONTENT);
+    current_access = ADMIN;
+}
+
+void getTable(){createMessage(id,id,GET_TABLE,NOGEN,NOCOMP,NOKEY,NOCONTENT);}
+
+void fillAddress(id_a table[N])
+{
+    for (i : id_a)
+    {
+        target_address[i] = table[i];
+    }
+}
+
+void editTable(){createMessage(id,id,EDIT_TABLE,NOGEN,NOCOMP,NOKEY,NOCONTENT);}
+
+void prob(int target)
+{
+    createMessage(id,target,PROB,GEN,forgePublicComp(GEN),NOKEY,NOCONTENT);
+    target_acquired[target]=2;
+}
+
+void answerProb(int target)
+{
+    createMessage(id,target,ANSWER,GEN,forgePublicComp(GEN),NOKEY,NOCONTENT);
+    target_acquired[target]=1;
+}
+
+void sendMessage(int target){createMessage(id,target,COMM,NOGEN,NOCOMP,shared_key[target],CONTENT);}
+
+void receive()
+{
+    if (M.type == PROB &amp;&amp; M.gen == GEN){
+        forgeKey(M.sender,M.comp);
+        target_acquired[M.sender]=3;
+        }
+    else
+        if (M.type == ANSWER &amp;&amp; M.gen == GEN)
+            {
+                forgeKey(M.sender,M.comp);
+                target_acquired[M.sender]=1;
+            }
+}
+
+void receiveAdmin()
+{
+    
+}</declaration>
+		<location id="id0" x="-663" y="-246">
+			<committed/>
+		</location>
+		<location id="id1" x="-663" y="-374">
+		</location>
+		<location id="id2" x="-450" y="-102">
+			<committed/>
+		</location>
+		<location id="id3" x="-450" y="-246">
+		</location>
+		<location id="id4" x="-561" y="-374">
+			<committed/>
+		</location>
+		<location id="id5" x="-340" y="-374">
+			<committed/>
+		</location>
+		<location id="id6" x="-238" y="-374">
+		</location>
+		<location id="id7" x="-450" y="-374">
+		</location>
+		<location id="id8" x="-144" y="-280">
+			<name x="-212" y="-314">ANSWERING_PROB</name>
+			<committed/>
+		</location>
+		<location id="id9" x="-195" y="110">
+			<name x="-271" y="119">SENDING_MESSAGE</name>
+			<committed/>
+		</location>
+		<location id="id10" x="-93" y="110">
+			<name x="-110" y="119">PROBING_TARGET</name>
+			<committed/>
+		</location>
+		<location id="id11" x="43" y="-102">
+			<name x="18" y="-136">RECEIVE</name>
+			<committed/>
+		</location>
+		<location id="id12" x="-144" y="-102">
+			<name x="-154" y="-136">ATTACKED</name>
+		</location>
+		<init ref="id6"/>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id3"/>
+			<label kind="assignment" x="-645" y="-246">fillAddress(address_table)</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-663" y="-327">out[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="-331" y="-102">in[id]!</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id2"/>
+			<label kind="assignment" x="-442" y="-178">editTable()</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-629" y="-408">in[id]!</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id4"/>
+			<label kind="assignment" x="-535" y="-416">getTable()</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id7"/>
+			<label kind="synchronisation" x="-399" y="-408">in[id]!</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id5"/>
+			<label kind="assignment" x="-306" y="-408">root()</label>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id8"/>
+			<label kind="select" x="-348" y="-246">id_v : id_victime</label>
+			<label kind="guard" x="-348" y="-229">target_acquired[id_v]==3</label>
+			<label kind="assignment" x="-348" y="-212">answerProb(id_v)</label>
+			<nail x="-229" y="-187"/>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="-127" y="-229">in[id]!</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="-178" y="-9">in[id]!</label>
+			<nail x="-144" y="110"/>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id9"/>
+			<label kind="select" x="-314" y="8">id_v : id_victime</label>
+			<label kind="guard" x="-314" y="25">target_acquired[id_v]==1</label>
+			<label kind="assignment" x="-314" y="42">sendMessage(id_v)</label>
+			<nail x="-263" y="42"/>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id12"/>
+			<label kind="synchronisation" x="-144" y="-25">in[id]!</label>
+			<nail x="-144" y="110"/>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id10"/>
+			<label kind="select" x="-118" y="8">id_v : id_victime</label>
+			<label kind="guard" x="-118" y="25">target_acquired[id_v]==0</label>
+			<label kind="assignment" x="-118" y="42">prob(id_v)</label>
+			<nail x="-25" y="42"/>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id12"/>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id11"/>
+			<label kind="synchronisation" x="-49" y="-187">out[id]?</label>
+			<label kind="assignment" x="-50" y="-170">receive()</label>
+			<nail x="-50" y="-212"/>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">Acteur</name>
+		<parameter>const id_a id</parameter>
+		<declaration>//1 for Alice, 2 for Bob
+const int PRIVATE_KEY = id + 1;
+int shared_key;
+
+int findCorrespondent(){
+    if (id == 0)    {return 1;}    else    {return 0;}
+}
+
+const int CORRESPONDENT = findCorrespondent();
+
+
+
+
+void createMessage(int a, int b, int c, int d, int e)
+{
+    M.sender = id;
+    M.receiver = CORRESPONDENT;
+    M.type = a;
+    M.gen = b;
+    M.comp = c;
+    M.key = d;
+    M.content = e;
+    M.access = USER;
+}
+
+int forgePublicComp(int comp){return (comp + PRIVATE_KEY);}
+
+void forgeKey(int comp){shared_key= PRIVATE_KEY + comp;}
+
+void prob(){createMessage(PROB,GEN,forgePublicComp(GEN),NOKEY,NOCONTENT);}
+
+void answerProb(){createMessage(ANSWER,GEN,forgePublicComp(GEN),NOKEY,NOCONTENT);}
+
+void sendMessage(){createMessage(COMM,NOGEN,NOCOMP,shared_key,CONTENT);}
+
+void receive()
+{
+    if (M.type == PROB &amp;&amp; M.gen == GEN){
+        forgeKey(M.comp);
+        }
+    else
+        if (M.type == ANSWER &amp;&amp; M.gen == GEN)
+            {
+                forgeKey(M.comp);
+            }
+}
+
+
+
+</declaration>
+		<location id="id13" x="-255" y="-374">
+			<committed/>
+		</location>
+		<location id="id14" x="238" y="-450">
+			<name x="196" y="-442">SENDING_MESSAGE</name>
+			<committed/>
+		</location>
+		<location id="id15" x="51" y="-297">
+			<name x="51" y="-288">ANSWERING_PROB</name>
+			<committed/>
+		</location>
+		<location id="id16" x="-467" y="-620">
+			<name x="-484" y="-654">UNWANTED</name>
+		</location>
+		<location id="id17" x="51" y="-450">
+			<name x="-26" y="-484">COMM_CHANNEL</name>
+		</location>
+		<location id="id18" x="-102" y="-297">
+			<name x="-144" y="-331">RECEIVED_PROB</name>
+		</location>
+		<location id="id19" x="-255" y="-450">
+			<name x="-263" y="-484">INITIATED_PROB</name>
+		</location>
+		<location id="id20" x="-255" y="-297">
+			<name x="-265" y="-331">INIT</name>
+		</location>
+		<init ref="id20"/>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id16"/>
+			<label kind="synchronisation" x="-340" y="-238">out[id]?</label>
+			<nail x="-161" y="-221"/>
+			<nail x="-467" y="-221"/>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id19"/>
+			<label kind="synchronisation" x="-255" y="-429">in[id]!</label>
+		</transition>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id15"/>
+			<label kind="assignment" x="-68" y="-289">answerProb()</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id14"/>
+			<label kind="assignment" x="102" y="-476">sendMessage()</label>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id16"/>
+			<label kind="guard" x="-459" y="-450">M.type != PROB</label>
+			<label kind="synchronisation" x="-459" y="-433">out[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id16"/>
+			<label kind="guard" x="-374" y="-527">M.type != ANSWER</label>
+			<label kind="synchronisation" x="-374" y="-510">out[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id16"/>
+			<label kind="guard" x="-297" y="-595">M.type != COMM || M.key != shared_key</label>
+			<label kind="synchronisation" x="-297" y="-578">out[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id17"/>
+			<label kind="synchronisation" x="153" y="-416">in[id]!</label>
+			<nail x="238" y="-391"/>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id17"/>
+			<label kind="guard" x="-8" y="-637">M.type == COMM &amp;&amp; M.key == shared_key</label>
+			<label kind="synchronisation" x="-8" y="-620">out[id]?</label>
+			<label kind="assignment" x="-8" y="-603">receive()</label>
+			<nail x="51" y="-595"/>
+			<nail x="170" y="-595"/>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id17"/>
+			<label kind="guard" x="-161" y="-459">M.type == ANSWER</label>
+			<label kind="synchronisation" x="-161" y="-442">out[id]?</label>
+			<label kind="assignment" x="-161" y="-425">receive()</label>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id17"/>
+			<label kind="synchronisation" x="59" y="-382">in[id]!</label>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id18"/>
+			<label kind="guard" x="-229" y="-289">M.type == PROB</label>
+			<label kind="synchronisation" x="-229" y="-272">out[id]?</label>
+			<label kind="assignment" x="-229" y="-255">receive()</label>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id13"/>
+			<label kind="assignment" x="-272" y="-348">prob()</label>
+		</transition>
+	</template>
+	<template>
+		<name>Reseau</name>
+		<declaration>id_a id2address[N];
+
+void initialize()
+{
+    for (id : id_a)
+    {
+        id2address[id] = id;
+    }
+}
+
+void sendTable()
+{
+    address_table = id2address;
+}
+
+void editTable(id_a new_receiver)
+{
+    for (id : id_a)
+    {
+        id2address[id] = new_receiver;
+    }
+}
+</declaration>
+		<location id="id21" x="-195" y="-17">
+			<name x="-205" y="-51">ROOTED</name>
+			<committed/>
+		</location>
+		<location id="id22" x="357" y="-17">
+			<name x="347" y="-51">INIT</name>
+			<committed/>
+		</location>
+		<location id="id23" x="-127" y="187">
+			<name x="-187" y="178">TABLE</name>
+			<committed/>
+		</location>
+		<location id="id24" x="-144" y="-212">
+			<name x="-195" y="-229">EDIT</name>
+			<committed/>
+		</location>
+		<location id="id25" x="-8" y="-119">
+			<name x="-18" y="-153">SEND</name>
+			<committed/>
+		</location>
+		<location id="id26" x="-8" y="-17">
+			<name x="-76" y="-8">READY</name>
+		</location>
+		<location id="id27" x="-8" y="76">
+			<name x="-17" y="93">ADMIN_SEND</name>
+			<committed/>
+		</location>
+		<init ref="id22"/>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id26"/>
+		</transition>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id21"/>
+			<label kind="select" x="-170" y="-110">e : id_a</label>
+			<label kind="guard" x="-170" y="-93">M.type == ROOT</label>
+			<label kind="synchronisation" x="-170" y="-76">in[e]?</label>
+			<nail x="-110" y="-68"/>
+		</transition>
+		<transition>
+			<source ref="id27"/>
+			<target ref="id26"/>
+			<label kind="synchronisation" x="93" y="59">out[M.receiver]!</label>
+			<nail x="85" y="76"/>
+			<nail x="85" y="8"/>
+		</transition>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id27"/>
+			<label kind="select" x="-8" y="0">e : id_a</label>
+			<label kind="guard" x="-8" y="17">(M.type == PROB || M.type == ANSWER || M.type == COMM) &amp;&amp; M.access == ADMIN</label>
+			<label kind="synchronisation" x="-8" y="38">in[e]?</label>
+			<nail x="-8" y="0"/>
+		</transition>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id26"/>
+			<label kind="assignment" x="161" y="-34">initialize()</label>
+		</transition>
+		<transition>
+			<source ref="id23"/>
+			<target ref="id26"/>
+			<label kind="synchronisation" x="-144" y="94">out[M.sender]!</label>
+		</transition>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id23"/>
+			<label kind="select" x="-110" y="153">e : id_a</label>
+			<label kind="guard" x="-110" y="187">M.access == ADMIN &amp;&amp; M.type == GET_TABLE</label>
+			<label kind="synchronisation" x="-109" y="170">in[e]?</label>
+			<label kind="assignment" x="-110" y="204">sendTable()</label>
+			<nail x="-51" y="187"/>
+		</transition>
+		<transition>
+			<source ref="id24"/>
+			<target ref="id26"/>
+		</transition>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id24"/>
+			<label kind="select" x="-126" y="-263">e : id_a</label>
+			<label kind="guard" x="-127" y="-246">M.access == ADMIN &amp;&amp; M.type == EDIT_TABLE</label>
+			<label kind="synchronisation" x="-126" y="-229">in[e]?</label>
+			<label kind="assignment" x="-126" y="-212">editTable(e)</label>
+			<nail x="-68" y="-212"/>
+		</transition>
+		<transition>
+			<source ref="id25"/>
+			<target ref="id26"/>
+			<label kind="synchronisation" x="93" y="-136">out[id2address[M.receiver]]!</label>
+			<nail x="85" y="-119"/>
+			<nail x="85" y="-42"/>
+		</transition>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id25"/>
+			<label kind="select" x="-8" y="-110">e : id_a</label>
+			<label kind="guard" x="-8" y="-93">(M.type == PROB || M.type == ANSWER || M.type == COMM) &amp;&amp; M.access == USER</label>
+			<label kind="synchronisation" x="-8" y="-80">in[e]?</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+Alice = Acteur(0);
+Bob = Acteur(1);
+Attaquant = Intrus(id_intrus);
+
+// List one or more processes to be composed into a system.
+system Alice,Bob,Reseau,Attaquant;
+    </system>
+	<queries>
+		<query>
+			<formula>A[] not Alice.UNWANTED
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>A[] true
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>A[] ((not deadlock) || (Alice.UNWANTED &amp;&amp; Bob.UNWANTED))
+			</formula>
+			<comment>
+			</comment>
+		</query>
+	</queries>
+</nta>
